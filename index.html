@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="et" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tartumaa Noortekogu</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+
+      <a href="#home" class="nav-logo">
+        <span class="logo-badge">TN</span>
+        <span data-et="Tartumaa Noortekogu" data-en="Tartumaa Youth Council">Tartumaa Noortekogu</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="#home"     data-et="Avaleht"      data-en="Home">Avaleht</a>
+        <a href="#projects" data-et="Projektid"    data-en="Projects">Projektid</a>
+        <a href="#about"    data-et="Meist"         data-en="About Us">Meist</a>
+        <a href="#contact"  data-et="Kontakt"       data-en="Contact">Kontakt</a>
+        <a href="#join"     data-et="Liitu meiega"  data-en="Join Us" class="nav-cta">Liitu meiega</a>
+      </nav>
+
+      <div class="nav-controls">
+        <div class="lang-switch">
+          <button id="btn-et" class="lang-btn active" aria-label="Eesti keel">ET</button>
+          <span class="lang-pipe">|</span>
+          <button id="btn-en" class="lang-btn"        aria-label="English">EN</button>
+        </div>
+        <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+          <span class="icon-sun">&#9728;</span>
+          <span class="icon-moon">&#9790;</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ HERO ════════════════════════════ -->
+  <section id="home" class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow" data-et="Tartumaa · Eesti" data-en="Tartumaa · Estonia">Tartumaa · Eesti</p>
+      <h1 data-et="Tartumaa Noortekogu" data-en="Tartumaa Youth Council">Tartumaa Noortekogu</h1>
+      <p class="hero-sub" data-et="Tartumaa noorte hääl ja esindus" data-en="The voice and representation of Tartumaa's youth">Tartumaa noorte hääl ja esindus</p>
+      <p class="hero-desc"
+         data-et="Me esindame Tartumaa noori, korraldame üritusi, viime ellu projekte ja osaleme otsuste tegemisel, mis kujundavad meie noorte tulevikku."
+         data-en="We represent the youth of Tartumaa, organise events, implement projects, and participate in decisions that shape our young people's future.">
+        Me esindame Tartumaa noori, korraldame üritusi, viime ellu projekte ja osaleme otsuste tegemisel, mis kujundavad meie noorte tulevikku.
+      </p>
+      <div class="hero-btns">
+        <a href="#join"  class="btn btn-primary" data-et="Liitu meiega"   data-en="Join Us">Liitu meiega</a>
+        <a href="#about" class="btn btn-outline"  data-et="Tutvu meiega"  data-en="Learn More">Tutvu meiega</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="hero-card hc-1">
+        <span class="hc-num">8+</span>
+        <span data-et="Liiget" data-en="Members">Liiget</span>
+      </div>
+      <div class="hero-card hc-2">
+        <span class="hc-num">10+</span>
+        <span data-et="Projekti" data-en="Projects">Projekti</span>
+      </div>
+      <div class="hero-card hc-3">
+        <span class="hc-num">500+</span>
+        <span data-et="Noort kaasatud" data-en="Youth engaged">Noort kaasatud</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════ STATS BAR ════════════════════════════ -->
+  <div class="stats-bar">
+    <div class="container stats-grid">
+      <div class="stat">
+        <strong>8+</strong>
+        <span data-et="Liiget" data-en="Members">Liiget</span>
+      </div>
+      <div class="stat">
+        <strong>10+</strong>
+        <span data-et="Projekti aastas" data-en="Projects per year">Projekti aastas</span>
+      </div>
+      <div class="stat">
+        <strong>2+</strong>
+        <span data-et="Aastat kogemust" data-en="Years of experience">Aastat kogemust</span>
+      </div>
+      <div class="stat">
+        <strong>500+</strong>
+        <span data-et="Noort kaasatud" data-en="Youth engaged">Noort kaasatud</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════ PROJECTS ═════════════════════════════ -->
+  <section id="projects" class="section projects-section">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-et="Meie projektid" data-en="Our Projects">Meie projektid</h2>
+        <p data-et="Tutvuge meie olulisemate tegevuste ja algatustega"
+           data-en="Explore our key activities and initiatives">
+          Tutvuge meie olulisemate tegevuste ja algatustega
+        </p>
+      </div>
+
+      <div class="cards-grid">
+
+        <article class="card">
+          <div class="card-icon">&#127919;</div>
+          <h3 data-et="Noortefoorum" data-en="Youth Forum">Noortefoorum</h3>
+          <p data-et="Iga-aastane foorum, kus noored arutavad olulisi teemasid ja teevad ettepanekuid kohalikele otsustajatele."
+             data-en="Annual forum where young people discuss important topics and make proposals to local decision-makers.">
+            Iga-aastane foorum, kus noored arutavad olulisi teemasid ja teevad ettepanekuid kohalikele otsustajatele.
+          </p>
+          <span class="tag" data-et="Üritus" data-en="Event">Üritus</span>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">&#127807;</div>
+          <h3 data-et="Roheline Tartumaa" data-en="Green Tartumaa">Roheline Tartumaa</h3>
+          <p data-et="Keskkonnateadlikkuse projekt: koristustalgud, istutamistalgud ja hariduslikud üritused koolides."
+             data-en="Environmental awareness project: clean-up campaigns, planting events, and educational activities in schools.">
+            Keskkonnateadlikkuse projekt: koristustalgud, istutamistalgud ja hariduslikud üritused koolides.
+          </p>
+          <span class="tag" data-et="Keskkond" data-en="Environment">Keskkond</span>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">&#128161;</div>
+          <h3 data-et="Noored Ettevõtjad" data-en="Young Entrepreneurs">Noored Ettevõtjad</h3>
+          <p data-et="Programm, mis aitab noortel arendada ettevõtlusoskusi mentorluse, töötubade ja äriplaanikontestide kaudu."
+             data-en="A program helping youth develop entrepreneurial skills through mentoring, workshops, and business plan competitions.">
+            Programm, mis aitab noortel arendada ettevõtlusoskusi mentorluse, töötubade ja äriplaanikontestide kaudu.
+          </p>
+          <span class="tag" data-et="Haridus" data-en="Education">Haridus</span>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">&#129309;</div>
+          <h3 data-et="Vabatahtlik Tartumaa" data-en="Volunteer Tartumaa">Vabatahtlik Tartumaa</h3>
+          <p data-et="Vabatahtliku töö populariseerimise programm, mis ühendab noori vabatahtlikke organisatsioonide ja kogukondadega."
+             data-en="A volunteer promotion program that connects young volunteers with organisations and communities.">
+            Vabatahtliku töö populariseerimise programm, mis ühendab noori vabatahtlikke organisatsioonide ja kogukondadega.
+          </p>
+          <span class="tag" data-et="Kogukond" data-en="Community">Kogukond</span>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">&#127917;</div>
+          <h3 data-et="Kultuurikuu" data-en="Culture Month">Kultuurikuu</h3>
+          <p data-et="Igakuised kultuuriüritused, mis toovad kokku noored loojad, artistid ja kultuurihuvilised üle Tartumaa."
+             data-en="Monthly cultural events bringing together young creators, artists, and culture enthusiasts across Tartumaa.">
+            Igakuised kultuuriüritused, mis toovad kokku noored loojad, artistid ja kultuurihuvilised üle Tartumaa.
+          </p>
+          <span class="tag" data-et="Kultuur" data-en="Culture">Kultuur</span>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">&#127942;</div>
+          <h3 data-et="Noorte Sport" data-en="Youth Sports">Noorte Sport</h3>
+          <p data-et="Sportlike tegevuste korraldamine tervisliku eluviisi ja meeskonnatöö edendamiseks noorte seas."
+             data-en="Organising sports activities to promote healthy lifestyles and teamwork skills among youth.">
+            Sportlike tegevuste korraldamine tervisliku eluviisi ja meeskonnatöö edendamiseks noorte seas.
+          </p>
+          <span class="tag" data-et="Sport" data-en="Sports">Sport</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ ABOUT ══════════════════════════════ -->
+  <section id="about" class="section about-section">
+    <div class="container about-grid">
+
+      <div class="about-text">
+        <div class="section-head left">
+          <h2 data-et="Meist" data-en="About Us">Meist</h2>
+          <p data-et="Kes me oleme ja mida me teeme" data-en="Who we are and what we do">Kes me oleme ja mida me teeme</p>
+        </div>
+        <p data-et="Tartumaa Noortekogu on noorte organisatsioon, mis esindab Tartumaa noorte huve ja vajadusi. Meie missioon on kaasata noori ühiskondlikesse protsessidesse, toetada nende arengut ning luua võimalusi eneseväljenduseks ja koostööks."
+           data-en="Tartumaa Noortekogu is a youth organisation representing the interests and needs of young people in Tartumaa. Our mission is to engage youth in social processes, support their development, and create opportunities for self-expression and collaboration.">
+          Tartumaa Noortekogu on noorte organisatsioon, mis esindab Tartumaa noorte huve ja vajadusi. Meie missioon on kaasata noori ühiskondlikesse protsessidesse, toetada nende arengut ning luua võimalusi eneseväljenduseks ja koostööks.
+        </p>
+        <p data-et="Oleme asutatud 2018. aastal ja alates sellest ajast kasvanud aktiivseks organisatsiooniks, kellel on üle 50 liikme erinevatest Tartumaa omavalitsustest."
+           data-en="Founded in 2018, we have grown into an active organisation with over 50 members from various municipalities across Tartumaa.">
+          Oleme asutatud 2018. aastal ja alates sellest ajast kasvanud aktiivseks organisatsiooniks, kellel on üle 50 liikme erinevatest Tartumaa omavalitsustest.
+        </p>
+
+        <div class="values-list">
+          <div class="value-row">
+            <span class="value-dot"></span>
+            <div>
+              <strong data-et="Kaasatus" data-en="Inclusion">Kaasatus</strong>
+              <p data-et="Iga noore hääl loeb" data-en="Every young person's voice matters">Iga noore hääl loeb</p>
+            </div>
+          </div>
+          <div class="value-row">
+            <span class="value-dot"></span>
+            <div>
+              <strong data-et="Koostöö" data-en="Collaboration">Koostöö</strong>
+              <p data-et="Koos saavutame rohkem" data-en="Together we achieve more">Koos saavutame rohkem</p>
+            </div>
+          </div>
+          <div class="value-row">
+            <span class="value-dot"></span>
+            <div>
+              <strong data-et="Areng" data-en="Growth">Areng</strong>
+              <p data-et="Toetame iga liikme isiklikku arengut" data-en="We support each member's personal growth">Toetame iga liikme isiklikku arengut</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-cards" aria-hidden="true">
+        <div class="ac ac-1">
+          <span class="ac-label" data-et="Missioon" data-en="Mission">Missioon</span>
+          <p data-et="Noori kaasav ja toetav organisatsioon" data-en="A youth-inclusive and supportive organisation">Noori kaasav ja toetav organisatsioon</p>
+        </div>
+        <div class="ac ac-2">
+          <span class="ac-label" data-et="Visioon" data-en="Vision">Visioon</span>
+          <p data-et="Tartumaa on parim koht nooreks olemiseks" data-en="Tartumaa is the best place to be young">Tartumaa on parim koht nooreks olemiseks</p>
+        </div>
+        <div class="ac ac-3">
+          <span class="ac-label" data-et="Väärtused" data-en="Values">Väärtused</span>
+          <p data-et="Kaasatus · Koostöö · Areng" data-en="Inclusion · Collaboration · Growth">Kaasatus · Koostöö · Areng</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════════════ CONTACT ════════════════════════════ -->
+  <section id="contact" class="section contact-section">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-et="Võta meiega ühendust" data-en="Contact Us">Võta meiega ühendust</h2>
+        <p data-et="Meil on hea meel sinust kuulda" data-en="We'd love to hear from you">Meil on hea meel sinust kuulda</p>
+      </div>
+
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="ci-item">
+            <div class="ci-icon">&#9993;</div>
+            <div>
+              <strong data-et="E-post" data-en="Email">E-post</strong>
+              <a href="mailto:info@tartumaa-noortekogu.ee">info@tartumaa-noortekogu.ee</a>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">&#128205;</div>
+            <div>
+              <strong data-et="Asukoht" data-en="Location">Asukoht</strong>
+              <span data-et="Tartu, Tartumaa, Eesti" data-en="Tartu, Tartumaa, Estonia">Tartu, Tartumaa, Eesti</span>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">&#128241;</div>
+            <div>
+              <strong data-et="Sotsiaalmeedia" data-en="Social Media">Sotsiaalmeedia</strong>
+              <div class="social-row">
+                <a href="#" class="social-link">Facebook</a>
+                <a href="#" class="social-link">Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contact-form" novalidate>
+          <div class="form-group">
+            <label data-et="Sinu nimi" data-en="Your Name">Sinu nimi</label>
+            <input type="text"
+                   data-placeholder-et="Nimi"
+                   data-placeholder-en="Name"
+                   placeholder="Nimi" />
+          </div>
+          <div class="form-group">
+            <label data-et="E-posti aadress" data-en="Email Address">E-posti aadress</label>
+            <input type="email"
+                   data-placeholder-et="email@näide.ee"
+                   data-placeholder-en="email@example.com"
+                   placeholder="email@näide.ee" />
+          </div>
+          <div class="form-group">
+            <label data-et="Sõnum" data-en="Message">Sõnum</label>
+            <textarea rows="5"
+                      data-placeholder-et="Kirjuta siia oma sõnum..."
+                      data-placeholder-en="Write your message here...">
+            </textarea>
+          </div>
+          <button type="submit" class="btn btn-primary"
+                  data-et="Saada sõnum" data-en="Send Message">Saada sõnum</button>
+          <p class="form-success hidden"
+             data-et="Sõnum saadetud! Võtame teiega peagi ühendust."
+             data-en="Message sent! We'll get back to you soon.">
+            Sõnum saadetud! Võtame teiega peagi ühendust.
+          </p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ JOIN ═══════════════════════════════ -->
+  <section id="join" class="section join-section">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-et="Liitu meiega" data-en="Join Us">Liitu meiega</h2>
+        <p data-et="Saa osa Tartumaa noorte kogukonnast" data-en="Become part of the Tartumaa youth community">Saa osa Tartumaa noorte kogukonnast</p>
+      </div>
+
+      <div class="steps-row">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4 data-et="Täida avaldus" data-en="Fill in the form">Täida avaldus</h4>
+          <p data-et="Täida allolev liitumisavaldus" data-en="Complete the application form below">Täida allolev liitumisavaldus</p>
+        </div>
+        <div class="step-arrow">&#8594;</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4 data-et="Tutvumiskohtumine" data-en="Introduction Meeting">Tutvumiskohtumine</h4>
+          <p data-et="Kohtume ja tutvustame sind meie liikmetele" data-en="We meet and introduce you to our members">Kohtume ja tutvustame sind meie liikmetele</p>
+        </div>
+        <div class="step-arrow">&#8594;</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4 data-et="Tere tulemast!" data-en="Welcome!">Tere tulemast!</h4>
+          <p data-et="Oled osa meie perekonnast!" data-en="You're part of our family!">Oled osa meie perekonnast!</p>
+        </div>
+      </div>
+
+      <form class="join-form" id="join-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-et="Eesnimi" data-en="First Name">Eesnimi</label>
+            <input type="text"
+                   data-placeholder-et="Eesnimi"
+                   data-placeholder-en="First Name"
+                   placeholder="Eesnimi" />
+          </div>
+          <div class="form-group">
+            <label data-et="Perekonnanimi" data-en="Last Name">Perekonnanimi</label>
+            <input type="text"
+                   data-placeholder-et="Perekonnanimi"
+                   data-placeholder-en="Last Name"
+                   placeholder="Perekonnanimi" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label data-et="Vanus" data-en="Age">Vanus</label>
+            <input type="number" min="13" max="26"
+                   data-placeholder-et="Sinu vanus (13–26)"
+                   data-placeholder-en="Your age (13–26)"
+                   placeholder="Sinu vanus (13–26)" />
+          </div>
+          <div class="form-group">
+            <label data-et="E-post" data-en="Email">E-post</label>
+            <input type="email"
+                   data-placeholder-et="email@näide.ee"
+                   data-placeholder-en="email@example.com"
+                   placeholder="email@näide.ee" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-et="Miks soovid liituda?" data-en="Why do you want to join?">Miks soovid liituda?</label>
+          <textarea rows="4"
+                    data-placeholder-et="Räägi meile oma huvidest ja motivatsioonist..."
+                    data-placeholder-en="Tell us about your interests and motivation...">
+          </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg"
+                data-et="Esita avaldus" data-en="Submit Application">Esita avaldus</button>
+        <p class="form-success hidden"
+           data-et="Avaldus esitatud! Võtame teiega peagi ühendust."
+           data-en="Application submitted! We'll get back to you soon.">
+          Avaldus esitatud! Võtame teiega peagi ühendust.
+        </p>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════════════ FOOTER ═════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+        <span class="logo-badge">TN</span>
+        <p data-et="Tartumaa noorte hääl" data-en="The voice of Tartumaa's youth">Tartumaa noorte hääl</p>
+      </div>
+
+      <nav class="footer-links">
+        <strong data-et="Kiirlingid" data-en="Quick Links">Kiirlingid</strong>
+        <a href="#home"     data-et="Avaleht"     data-en="Home">Avaleht</a>
+        <a href="#projects" data-et="Projektid"   data-en="Projects">Projektid</a>
+        <a href="#about"    data-et="Meist"        data-en="About Us">Meist</a>
+        <a href="#contact"  data-et="Kontakt"      data-en="Contact">Kontakt</a>
+        <a href="#join"     data-et="Liitu"        data-en="Join">Liitu</a>
+      </nav>
+
+      <div class="footer-contact">
+        <strong data-et="Kontakt" data-en="Contact">Kontakt</strong>
+        <a href="mailto:info@tartumaa-noortekogu.ee">info@tartumaa-noortekogu.ee</a>
+        <span data-et="Tartu, Tartumaa, Eesti" data-en="Tartu, Tartumaa, Estonia">Tartu, Tartumaa, Eesti</span>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>
+        <span data-et="© 2026 Tartumaa Noortekogu. Kõik õigused kaitstud."
+              data-en="© 2026 Tartumaa Youth Council. All rights reserved.">
+          © 2026 Tartumaa Noortekogu. Kõik õigused kaitstud.
+        </span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
