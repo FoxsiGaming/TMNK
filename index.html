@@ -4,9 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tartumaa Noortekogu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- Page-wide background orbs (fixed, behind everything) -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+    <div class="bg-orb orb-5"></div>
+    <div class="bg-orb orb-6"></div>
+  </div>
 
   <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
   <header class="navbar" id="navbar">
@@ -21,6 +34,7 @@
         <a href="#home"     data-et="Avaleht"      data-en="Home">Avaleht</a>
         <a href="#projects" data-et="Projektid"    data-en="Projects">Projektid</a>
         <a href="#about"    data-et="Meist"         data-en="About Us">Meist</a>
+        <a href="#members"  data-et="Liikmed"       data-en="Members">Liikmed</a>
         <a href="#contact"  data-et="Kontakt"       data-en="Contact">Kontakt</a>
         <a href="#join"     data-et="Liitu meiega"  data-en="Join Us" class="nav-cta">Liitu meiega</a>
       </nav>
@@ -44,9 +58,23 @@
   </header>
 
   <!-- ═══════════════════════════ HERO ════════════════════════════ -->
-  <section id="home" class="hero">
+  <section id="home" class="hero" style="position:relative">
+    <!-- Scattered decorative dots, rings, crosses -->
+    <div class="hero-deco" aria-hidden="true">
+      <span class="deco-dot dd-1"></span>
+      <span class="deco-dot dd-2"></span>
+      <span class="deco-dot dd-3"></span>
+      <span class="deco-dot dd-4"></span>
+      <span class="deco-dot dd-5"></span>
+      <span class="deco-ring dr-1"></span>
+      <span class="deco-ring dr-2"></span>
+      <span class="deco-ring dr-3"></span>
+      <span class="deco-cross dc-1">+</span>
+      <span class="deco-cross dc-2">+</span>
+      <span class="deco-cross dc-3">✦</span>
+    </div>
     <div class="hero-text">
-      <p class="hero-eyebrow" data-et="Tartumaa · Eesti" data-en="Tartumaa · Estonia">Tartumaa · Eesti</p>
+      <p class="hero-eyebrow" data-et="Tartumaa · Eesti" data-en="Tartumaa · Estonia">✦ Tartumaa · Eesti</p>
       <h1 data-et="Tartumaa Noortekogu" data-en="Tartumaa Youth Council">Tartumaa Noortekogu</h1>
       <p class="hero-sub" data-et="Tartumaa noorte hääl ja esindus" data-en="The voice and representation of Tartumaa's youth">Tartumaa noorte hääl ja esindus</p>
       <p class="hero-desc"
@@ -63,6 +91,7 @@
       <div class="blob blob-1"></div>
       <div class="blob blob-2"></div>
       <div class="blob blob-3"></div>
+      <div class="hero-ring"></div>
       <div class="hero-card hc-1">
         <span class="hc-num">8+</span>
         <span data-et="Liiget" data-en="Members">Liiget</span>
@@ -82,19 +111,19 @@
   <div class="stats-bar">
     <div class="container stats-grid">
       <div class="stat">
-        <strong>8+</strong>
+        <strong data-count="8">8+</strong>
         <span data-et="Liiget" data-en="Members">Liiget</span>
       </div>
       <div class="stat">
-        <strong>10+</strong>
+        <strong data-count="10">10+</strong>
         <span data-et="Projekti aastas" data-en="Projects per year">Projekti aastas</span>
       </div>
       <div class="stat">
-        <strong>2+</strong>
+        <strong data-count="2">2+</strong>
         <span data-et="Aastat kogemust" data-en="Years of experience">Aastat kogemust</span>
       </div>
       <div class="stat">
-        <strong>500+</strong>
+        <strong data-count="500">500+</strong>
         <span data-et="Noort kaasatud" data-en="Youth engaged">Noort kaasatud</span>
       </div>
     </div>
@@ -104,6 +133,7 @@
   <section id="projects" class="section projects-section">
     <div class="container">
       <div class="section-head">
+        <p class="eyebrow" data-et="Tegevused" data-en="Activities">Tegevused</p>
         <h2 data-et="Meie projektid" data-en="Our Projects">Meie projektid</h2>
         <p data-et="Tutvuge meie olulisemate tegevuste ja algatustega"
            data-en="Explore our key activities and initiatives">
@@ -183,6 +213,7 @@
 
       <div class="about-text">
         <div class="section-head left">
+          <p class="eyebrow" data-et="Kes me oleme" data-en="Who we are">Kes me oleme</p>
           <h2 data-et="Meist" data-en="About Us">Meist</h2>
           <p data-et="Kes me oleme ja mida me teeme" data-en="Who we are and what we do">Kes me oleme ja mida me teeme</p>
         </div>
@@ -197,21 +228,21 @@
 
         <div class="values-list">
           <div class="value-row">
-            <span class="value-dot"></span>
+            <span class="value-dot">✦</span>
             <div>
               <strong data-et="Kaasatus" data-en="Inclusion">Kaasatus</strong>
               <p data-et="Iga noore hääl loeb" data-en="Every young person's voice matters">Iga noore hääl loeb</p>
             </div>
           </div>
           <div class="value-row">
-            <span class="value-dot"></span>
+            <span class="value-dot">✦</span>
             <div>
               <strong data-et="Koostöö" data-en="Collaboration">Koostöö</strong>
               <p data-et="Koos saavutame rohkem" data-en="Together we achieve more">Koos saavutame rohkem</p>
             </div>
           </div>
           <div class="value-row">
-            <span class="value-dot"></span>
+            <span class="value-dot">✦</span>
             <div>
               <strong data-et="Areng" data-en="Growth">Areng</strong>
               <p data-et="Toetame iga liikme isiklikku arengut" data-en="We support each member's personal growth">Toetame iga liikme isiklikku arengut</p>
@@ -238,10 +269,128 @@
     </div>
   </section>
 
+  <!-- ══════════════════════════ MEMBERS ══════════════════════════ -->
+  <section id="members" class="section members-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-et="Meie tiim" data-en="Our team">Meie tiim</p>
+        <h2 data-et="Liikmed" data-en="Members">Liikmed</h2>
+        <p data-et="Tutvu Tartumaa Noortekogu liikmetega"
+           data-en="Meet the members of Tartumaa Youth Council">
+          Tutvu Tartumaa Noortekogu liikmetega
+        </p>
+      </div>
+
+      <div class="members-track-wrapper">
+        <div class="members-track" id="members-track">
+
+          <!--
+            ═══════════════════════════════════════════════
+            HOW TO ADD A MEMBER — copy one block below,
+            paste it at the end, and fill in the details.
+
+            To add a photo: replace the <div class="mc-avatar">
+            block with: <img src="assets/members/name.jpg" alt="Name">
+            ═══════════════════════════════════════════════
+          -->
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">MT</div>
+            </div>
+            <h3 class="mc-name">Mari Tamm</h3>
+            <span class="mc-age">21</span>
+            <p class="mc-role" data-et="Esimees" data-en="Chair">Esimees</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">JK</div>
+            </div>
+            <h3 class="mc-name">Jaan Kask</h3>
+            <span class="mc-age">20</span>
+            <p class="mc-role" data-et="Aseesimees" data-en="Vice Chair">Aseesimees</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">AS</div>
+            </div>
+            <h3 class="mc-name">Anna Sepp</h3>
+            <span class="mc-age">19</span>
+            <p class="mc-role" data-et="Sekretär" data-en="Secretary">Sekretär</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">KM</div>
+            </div>
+            <h3 class="mc-name">Kristoffer Mägi</h3>
+            <span class="mc-age">22</span>
+            <p class="mc-role" data-et="Projektijuht" data-en="Project Lead">Projektijuht</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">LP</div>
+            </div>
+            <h3 class="mc-name">Liisa Pärn</h3>
+            <span class="mc-age">18</span>
+            <p class="mc-role" data-et="Kommunikatsioon" data-en="Communications">Kommunikatsioon</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">ML</div>
+            </div>
+            <h3 class="mc-name">Mihkel Leinonen</h3>
+            <span class="mc-age">20</span>
+            <p class="mc-role" data-et="Noorteesindaja" data-en="Youth Rep">Noorteesindaja</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">KN</div>
+            </div>
+            <h3 class="mc-name">Kadri Nurm</h3>
+            <span class="mc-age">19</span>
+            <p class="mc-role" data-et="Ürituste koordinaator" data-en="Events Coordinator">Ürituste koordinaator</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">TR</div>
+            </div>
+            <h3 class="mc-name">Tõnis Rebane</h3>
+            <span class="mc-age">21</span>
+            <p class="mc-role" data-et="Vabatahtlike koordinaator" data-en="Volunteer Coordinator">Vabatahtlike koordinaator</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+        </div><!-- /members-track -->
+      </div><!-- /members-track-wrapper -->
+
+      <div class="members-nav">
+        <button class="scroll-btn" id="scroll-left"  aria-label="Keri vasakule">&#8592;</button>
+        <span   class="members-count" id="members-count" aria-live="polite"></span>
+        <button class="scroll-btn" id="scroll-right" aria-label="Keri paremale">&#8594;</button>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ═════════════════════════ CONTACT ════════════════════════════ -->
   <section id="contact" class="section contact-section">
     <div class="container">
       <div class="section-head">
+        <p class="eyebrow" data-et="Kirjuta meile" data-en="Get in touch">Kirjuta meile</p>
         <h2 data-et="Võta meiega ühendust" data-en="Contact Us">Võta meiega ühendust</h2>
         <p data-et="Meil on hea meel sinust kuulda" data-en="We'd love to hear from you">Meil on hea meel sinust kuulda</p>
       </div>
@@ -314,6 +463,7 @@
   <section id="join" class="section join-section">
     <div class="container">
       <div class="section-head">
+        <p class="eyebrow" data-et="Saa liikmeks" data-en="Become a member">Saa liikmeks</p>
         <h2 data-et="Liitu meiega" data-en="Join Us">Liitu meiega</h2>
         <p data-et="Saa osa Tartumaa noorte kogukonnast" data-en="Become part of the Tartumaa youth community">Saa osa Tartumaa noorte kogukonnast</p>
       </div>
@@ -404,6 +554,7 @@
         <a href="#home"     data-et="Avaleht"     data-en="Home">Avaleht</a>
         <a href="#projects" data-et="Projektid"   data-en="Projects">Projektid</a>
         <a href="#about"    data-et="Meist"        data-en="About Us">Meist</a>
+        <a href="#members"  data-et="Liikmed"      data-en="Members">Liikmed</a>
         <a href="#contact"  data-et="Kontakt"      data-en="Contact">Kontakt</a>
         <a href="#join"     data-et="Liitu"        data-en="Join">Liitu</a>
       </nav>

@@ -1,7 +1,5 @@
 /* ============================================================
    TARTUMAA NOORTEKOGU — script.js
-   Handles: language switching, dark/light theme, mobile nav,
-            scroll effects, form submissions, scroll-reveal
    ============================================================ */
 
 (function () {
@@ -9,9 +7,9 @@
 
   /* ── 1. Theme ─────────────────────────────────────────────── */
 
-  const root        = document.documentElement;
-  const themeBtn    = document.getElementById('theme-toggle');
-  const THEME_KEY   = 'tn-theme';
+  const root      = document.documentElement;
+  const themeBtn  = document.getElementById('theme-toggle');
+  const THEME_KEY = 'tn-theme';
 
   function getSystemTheme() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -28,15 +26,11 @@
   }
 
   themeBtn.addEventListener('click', () => {
-    const current = root.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 
-  /* Listen for OS-level changes when no manual override stored */
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (!localStorage.getItem(THEME_KEY)) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
+    if (!localStorage.getItem(THEME_KEY)) applyTheme(e.matches ? 'dark' : 'light');
   });
 
   /* ── 2. Language ──────────────────────────────────────────── */
@@ -46,31 +40,22 @@
   const btnEn    = document.getElementById('btn-en');
 
   function applyLang(lang) {
-    /* Text nodes */
     document.querySelectorAll('[data-et]').forEach(el => {
       const val = el.getAttribute('data-' + lang);
       if (val !== null) el.textContent = val;
     });
-
-    /* Placeholders */
     document.querySelectorAll('[data-placeholder-et]').forEach(el => {
       const val = el.getAttribute('data-placeholder-' + lang);
       if (val !== null) el.placeholder = val;
     });
-
-    /* HTML lang attribute */
     root.lang = lang === 'et' ? 'et' : 'en';
-
-    /* Button state */
     btnEt.classList.toggle('active', lang === 'et');
     btnEn.classList.toggle('active', lang === 'en');
-
     localStorage.setItem(LANG_KEY, lang);
   }
 
   function initLang() {
-    const saved = localStorage.getItem(LANG_KEY);
-    applyLang(saved || 'et');
+    applyLang(localStorage.getItem(LANG_KEY) || 'et');
   }
 
   btnEt.addEventListener('click', () => applyLang('et'));
@@ -87,7 +72,6 @@
     hamburger.setAttribute('aria-expanded', String(open));
   });
 
-  /* Close mobile nav when a link is tapped */
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('open');
@@ -96,7 +80,6 @@
     });
   });
 
-  /* Close on outside click */
   document.addEventListener('click', e => {
     if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
       navLinks.classList.remove('open');
@@ -111,31 +94,27 @@
     navbar.classList.toggle('scrolled', window.scrollY > 12);
   }, { passive: true });
 
-  /* ── 5. Active nav link (intersection) ───────────────────── */
-
-  const sections = document.querySelectorAll('section[id], div[id]');
+  /* ── 5. Active nav link ───────────────────────────────────── */
 
   const sectionObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         navLinks.querySelectorAll('a').forEach(a => {
-          a.classList.toggle(
-            'active',
-            a.getAttribute('href') === '#' + entry.target.id
-          );
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
         });
       }
     });
   }, { rootMargin: '-50% 0px -50% 0px' });
 
-  sections.forEach(s => sectionObserver.observe(s));
+  document.querySelectorAll('section[id], div[id]').forEach(s => sectionObserver.observe(s));
 
-  /* ── 6. Scroll-reveal ────────────────────────────────────── */
+  /* ── 6. Scroll reveal ────────────────────────────────────── */
 
   const revealTargets = [
     '.card', '.stat', '.step', '.ci-item', '.value-row',
     '.ac', '.section-head', '.hero-text', '.about-text',
-    '.contact-form', '.join-form', '.steps-row'
+    '.contact-form', '.join-form', '.steps-row',
+    '.members-track-wrapper', '.members-nav'
   ];
 
   const revealObserver = new IntersectionObserver(entries => {
@@ -145,45 +124,63 @@
         revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
 
   revealTargets.forEach(selector => {
     document.querySelectorAll(selector).forEach((el, i) => {
       el.classList.add('reveal');
-      el.style.transitionDelay = (i * 60) + 'ms';
+      el.style.transitionDelay = (i * 55) + 'ms';
       revealObserver.observe(el);
     });
   });
 
-  /* ── 7. Form submissions (demo) ──────────────────────────── */
+  /* ── 7. Stat counter animation ────────────────────────────── */
+
+  function animateCount(el, target, suffix, duration) {
+    const start = performance.now();
+    function step(now) {
+      const elapsed = Math.min((now - start) / duration, 1);
+      const eased   = 1 - Math.pow(1 - elapsed, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (elapsed < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const countObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.getAttribute('data-count'), 10);
+      animateCount(el, target, '+', 1400);
+      countObserver.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+  /* ── 8. Form submissions ─────────────────────────────────── */
 
   function handleForm(formId) {
     const form = document.getElementById(formId);
     if (!form) return;
-
     const successMsg = form.querySelector('.form-success');
-
     form.addEventListener('submit', e => {
       e.preventDefault();
-
-      /* Basic required-field check */
       const inputs = form.querySelectorAll('input, textarea');
       let valid = true;
       inputs.forEach(el => {
         el.style.borderColor = '';
         if (el.hasAttribute('required') && !el.value.trim()) {
-          el.style.borderColor = '#ef4444';
+          el.style.borderColor = '#ec4899';
           valid = false;
         }
       });
       if (!valid) return;
-
       const btn = form.querySelector('button[type="submit"]');
       const originalText = btn.textContent;
       btn.disabled = true;
       btn.textContent = '...';
-
-      /* Simulate async submit */
       setTimeout(() => {
         btn.disabled = false;
         btn.textContent = originalText;
@@ -199,17 +196,72 @@
   handleForm('contact-form');
   handleForm('join-form');
 
-  /* ── 8. Smooth anchor scroll (offset for fixed navbar) ───── */
+  /* ── 9. Smooth anchor scroll ─────────────────────────────── */
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
       const target = document.querySelector(link.getAttribute('href'));
       if (!target) return;
       e.preventDefault();
-      const offset = navbar.offsetHeight + 8;
-      window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+      window.scrollTo({ top: target.offsetTop - navbar.offsetHeight - 8, behavior: 'smooth' });
     });
   });
+
+  /* ── 10. Members carousel ───────────────────────────────────── */
+
+  const track      = document.getElementById('members-track');
+  const btnLeft    = document.getElementById('scroll-left');
+  const btnRight   = document.getElementById('scroll-right');
+  const countLabel = document.getElementById('members-count');
+
+  if (track && btnLeft && btnRight) {
+    const CARD_W = 188 + 20; // card width + gap
+
+    function updateCarousel() {
+      const max = track.scrollWidth - track.clientWidth;
+      btnLeft.disabled  = track.scrollLeft <= 2;
+      btnRight.disabled = track.scrollLeft >= max - 2;
+
+      /* Show current position as "1–4 / 8" style counter */
+      if (countLabel) {
+        const visible = Math.round(track.clientWidth / CARD_W);
+        const first   = Math.round(track.scrollLeft / CARD_W) + 1;
+        const last    = Math.min(first + visible - 1, track.children.length);
+        countLabel.textContent = first + '–' + last + ' / ' + track.children.length;
+      }
+    }
+
+    btnLeft.addEventListener('click',  () => { track.scrollBy({ left: -CARD_W * 3, behavior: 'smooth' }); });
+    btnRight.addEventListener('click', () => { track.scrollBy({ left:  CARD_W * 3, behavior: 'smooth' }); });
+    track.addEventListener('scroll', updateCarousel, { passive: true });
+    updateCarousel();
+
+    /* Drag-to-scroll (desktop) */
+    let dragging = false, startX = 0, scrollOrigin = 0;
+
+    track.addEventListener('mousedown', e => {
+      dragging    = true;
+      startX      = e.pageX - track.offsetLeft;
+      scrollOrigin = track.scrollLeft;
+    });
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      e.preventDefault();
+      track.scrollLeft = scrollOrigin - (e.pageX - track.offsetLeft - startX);
+    });
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      updateCarousel();
+    });
+
+    /* Prevent link-click from firing on drag end */
+    track.querySelectorAll('.member-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (Math.abs(track.scrollLeft - scrollOrigin) > 5) e.preventDefault();
+      });
+    });
+  }
 
   /* ── Init ─────────────────────────────────────────────────── */
   initTheme();
