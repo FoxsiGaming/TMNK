@@ -1019,17 +1019,23 @@ img { max-width: 100%; display: block; }
 .step:nth-child(5)::after { background: linear-gradient(135deg, #F5A623, #22A86A); }
 
 .step-num {
-  font-size: 2.6rem;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto .85rem;
+  font-size: 1.3rem;
   font-weight: 900;
-  line-height: 1;
-  margin-bottom: .6rem;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
+  color: #fff;
+  letter-spacing: -.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  background-size: 200% auto;
+  animation: gradient-shift 5s ease infinite;
 }
-.step:nth-child(1) .step-num { background: var(--grad-icon-1); background-size: 200% auto; animation: gradient-shift 5s ease infinite; }
-.step:nth-child(3) .step-num { background: var(--grad-icon-2); background-size: 200% auto; animation: gradient-shift 5s ease 1s infinite; }
-.step:nth-child(5) .step-num { background: linear-gradient(135deg, #F5A623, #22A86A); background-size: 200% auto; animation: gradient-shift 5s ease 2s infinite; }
+.step:nth-child(1) .step-num { background: var(--grad-icon-1); }
+.step:nth-child(3) .step-num { background: var(--grad-icon-2); animation-delay: 1s; }
+.step:nth-child(5) .step-num { background: linear-gradient(135deg, #F5A623, #22A86A); animation-delay: 2s; }
 
 .step h4 { font-size: 1rem; font-weight: 700; margin-bottom: .35rem; }
 .step p  { font-size: .85rem; color: var(--text-muted); margin: 0; }
@@ -1208,17 +1214,16 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(to left, var(--bg), transparent);
 }
 
-/* Scrollable track */
+/* Scrollable track — no CSS scroll-snap or smooth-scroll; JS controls both */
 .members-track {
   display: flex;
   gap: 1.25rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
   padding: 1.5rem 1.5rem 2rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
   cursor: grab;
+  will-change: scroll-position;
 }
 .members-track:active { cursor: grabbing; }
 .members-track::-webkit-scrollbar { display: none; }
@@ -1231,7 +1236,6 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.75rem 1.25rem 1.5rem;
-  scroll-snap-align: start;
   text-align: center;
   text-decoration: none;
   color: var(--text);

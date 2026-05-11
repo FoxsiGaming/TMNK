@@ -207,61 +207,138 @@
     });
   });
 
-  /* ── 10. Members carousel ───────────────────────────────────── */
+  /* ── 10. Members carousel — infinite loop ───────────────────── */
+  (function () {
+    const track      = document.getElementById('members-track');
+    const btnLeft    = document.getElementById('scroll-left');
+    const btnRight   = document.getElementById('scroll-right');
+    const countLabel = document.getElementById('members-count');
+    if (!track) return;
 
-  const track      = document.getElementById('members-track');
-  const btnLeft    = document.getElementById('scroll-left');
-  const btnRight   = document.getElementById('scroll-right');
-  const countLabel = document.getElementById('members-count');
+    /* card width (188px) + gap (1.25rem = 20px) */
+    const CARD_W = 208;
 
-  if (track && btnLeft && btnRight) {
-    const CARD_W = 188 + 20; // card width + gap
+    /* ── Clone cards to create infinite buffer ── */
+    const realCards = Array.from(track.children);
+    const N = realCards.length;
+    if (N === 0) return;
 
-    function updateCarousel() {
-      const max = track.scrollWidth - track.clientWidth;
-      btnLeft.disabled  = track.scrollLeft <= 2;
-      btnRight.disabled = track.scrollLeft >= max - 2;
+    /* Append clones after real cards */
+    realCards.forEach(c => {
+      const cl = c.cloneNode(true);
+      cl.setAttribute('aria-hidden', 'true');
+      cl.setAttribute('tabindex', '-1');
+      track.append(cl);
+    });
+    /* Prepend clones before real cards */
+    realCards.slice().reverse().forEach(c => {
+      const cl = c.cloneNode(true);
+      cl.setAttribute('aria-hidden', 'true');
+      cl.setAttribute('tabindex', '-1');
+      track.prepend(cl);
+    });
 
-      /* Show current position as "1–4 / 8" style counter */
-      if (countLabel) {
-        const visible = Math.round(track.clientWidth / CARD_W);
-        const first   = Math.round(track.scrollLeft / CARD_W) + 1;
-        const last    = Math.min(first + visible - 1, track.children.length);
-        countLabel.textContent = first + '–' + last + ' / ' + track.children.length;
+    /* Full pixel width of one set of N cards */
+    const SET_W = N * CARD_W;
+
+    /* Start positioned at the real cards (after the before-clones) */
+    track.scrollLeft = SET_W;
+
+    /* ── Teleport: silently jump when scrolled into clone zone ── */
+    let jumping = false;
+    let dragOrigin = SET_W; /* updated on jumps so drag stays accurate */
+
+    function teleportIfNeeded() {
+      if (jumping) return;
+      if (track.scrollLeft < SET_W) {
+        jumping = true;
+        track.scrollLeft += SET_W;
+        dragOrigin       += SET_W;
+        requestAnimationFrame(() => { jumping = false; });
+      } else if (track.scrollLeft >= 2 * SET_W) {
+        jumping = true;
+        track.scrollLeft -= SET_W;
+        dragOrigin       -= SET_W;
+        requestAnimationFrame(() => { jumping = false; });
       }
     }
 
-    btnLeft.addEventListener('click',  () => { track.scrollBy({ left: -CARD_W * 3, behavior: 'smooth' }); });
-    btnRight.addEventListener('click', () => { track.scrollBy({ left:  CARD_W * 3, behavior: 'smooth' }); });
-    track.addEventListener('scroll', updateCarousel, { passive: true });
-    updateCarousel();
+    function updateCounter() {
+      if (!countLabel) return;
+      const offset = track.scrollLeft - SET_W;
+      const idx    = (Math.round(offset / CARD_W) % N + N) % N;
+      countLabel.textContent = (idx + 1) + ' / ' + N;
+    }
 
-    /* Drag-to-scroll (desktop) */
-    let dragging = false, startX = 0, scrollOrigin = 0;
+    track.addEventListener('scroll', () => {
+      teleportIfNeeded();
+      updateCounter();
+    }, { passive: true });
+
+    updateCounter();
+
+    /* ── Custom smooth scroll for arrow buttons ──
+       We calculate a wrapped target so the animation never crosses
+       the clone boundary mid-flight (which would cause a visual jump). */
+    let rafId = null;
+
+    function smoothScrollTo(target, duration) {
+      if (rafId) cancelAnimationFrame(rafId);
+      const from  = track.scrollLeft;
+      const delta = target - from;
+      const t0    = performance.now();
+
+      function step(now) {
+        const p = Math.min((now - t0) / duration, 1);
+        const e = 1 - Math.pow(1 - p, 3); /* cubic ease-out */
+        track.scrollLeft = from + delta * e;
+        rafId = p < 1 ? requestAnimationFrame(step) : null;
+      }
+      rafId = requestAnimationFrame(step);
+    }
+
+    if (btnLeft) {
+      btnLeft.disabled = false;
+      btnLeft.addEventListener('click', () => {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        let t = track.scrollLeft - CARD_W * 3;
+        if (t < SET_W) t += SET_W; /* wrap: stay inside real-card zone */
+        smoothScrollTo(t, 380);
+      });
+    }
+    if (btnRight) {
+      btnRight.disabled = false;
+      btnRight.addEventListener('click', () => {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        let t = track.scrollLeft + CARD_W * 3;
+        if (t >= 2 * SET_W) t -= SET_W; /* wrap: stay inside real-card zone */
+        smoothScrollTo(t, 380);
+      });
+    }
+
+    /* ── Drag to scroll (desktop) ── */
+    let dragging = false, startX = 0, movedPx = 0;
 
     track.addEventListener('mousedown', e => {
-      dragging    = true;
-      startX      = e.pageX - track.offsetLeft;
-      scrollOrigin = track.scrollLeft;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      dragging   = true;
+      startX     = e.clientX;
+      dragOrigin = track.scrollLeft;
+      movedPx    = 0;
     });
     document.addEventListener('mousemove', e => {
       if (!dragging) return;
-      e.preventDefault();
-      track.scrollLeft = scrollOrigin - (e.pageX - track.offsetLeft - startX);
+      const dx = e.clientX - startX;
+      movedPx  = Math.abs(dx);
+      track.scrollLeft = dragOrigin - dx;
     });
-    document.addEventListener('mouseup', () => {
-      if (!dragging) return;
-      dragging = false;
-      updateCarousel();
-    });
+    document.addEventListener('mouseup', () => { dragging = false; });
 
-    /* Prevent link-click from firing on drag end */
-    track.querySelectorAll('.member-card').forEach(card => {
-      card.addEventListener('click', e => {
-        if (Math.abs(track.scrollLeft - scrollOrigin) > 5) e.preventDefault();
-      });
-    });
-  }
+    /* Block link navigation if the user was dragging */
+    track.addEventListener('click', e => {
+      if (movedPx > 5) { e.preventDefault(); movedPx = 0; }
+    }, true);
+  })();
 
   /* ── Init ─────────────────────────────────────────────────── */
   initTheme();
