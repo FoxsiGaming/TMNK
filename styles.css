@@ -1147,6 +1147,8 @@ img { max-width: 100%; display: block; }
   .nav-links a { padding: .65rem 1rem; border-radius: var(--radius-sm); }
   .nav-links a.nav-cta { margin: .25rem 0 0; text-align: center; }
   .hamburger { display: flex; }
+  .nav-logo span { display: none; }
+  .nav-inner { padding: 0 1rem; gap: 1rem; }
   .hero { padding-top: 5.5rem; }
   .hero-visual { display: none; }
   .cards-grid { grid-template-columns: 1fr; }
