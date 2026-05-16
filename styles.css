@@ -1129,9 +1129,10 @@ img { max-width: 100%; display: block; }
 @media (max-width: 680px) {
   .nav-links {
     position: fixed;
-    top: 68px; left: 0; right: 0;
+    top: 68px; left: .75rem; right: .75rem;
     background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     flex-direction: column;
     align-items: stretch;
     padding: 1rem 1.5rem 1.5rem;
