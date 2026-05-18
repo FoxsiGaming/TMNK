@@ -211,17 +211,21 @@
   });
 
   /* ── 10. Members carousel — infinite loop ───────────────────── */
-  (function () {
-    const track      = document.getElementById('members-track');
+  /* Wrapped in a function so it can re-init after dynamic.js injects content.
+     Uses cloneNode+replaceChild to strip old event listeners on re-init. */
+  function initMembersCarousel() {
+    let track      = document.getElementById('members-track');
     const btnLeft    = document.getElementById('scroll-left');
     const btnRight   = document.getElementById('scroll-right');
     const countLabel = document.getElementById('members-count');
     if (!track) return;
 
+    /* Remove any previous clones (re-init safe) */
+    track.querySelectorAll('[aria-hidden="true"]').forEach(c => c.remove());
+
     /* card width (188px) + gap (1.25rem = 20px) */
     const CARD_W = 208;
 
-    /* ── Clone cards to create infinite buffer ── */
     const realCards = Array.from(track.children);
     const N = realCards.length;
     if (N === 0) return;
@@ -241,15 +245,16 @@
       track.prepend(cl);
     });
 
-    /* Full pixel width of one set of N cards */
-    const SET_W = N * CARD_W;
+    /* Replace node to strip any old event listeners from previous init */
+    const freshTrack = track.cloneNode(true);
+    track.parentNode.replaceChild(freshTrack, track);
+    track = freshTrack;
 
-    /* Start positioned at the real cards (after the before-clones) */
+    const SET_W = N * CARD_W;
     track.scrollLeft = SET_W;
 
-    /* ── Teleport: silently jump when scrolled into clone zone ── */
     let jumping = false;
-    let dragOrigin = SET_W; /* updated on jumps so drag stays accurate */
+    let dragOrigin = SET_W;
 
     function teleportIfNeeded() {
       if (jumping) return;
@@ -277,12 +282,8 @@
       teleportIfNeeded();
       updateCounter();
     }, { passive: true });
-
     updateCounter();
 
-    /* ── Custom smooth scroll for arrow buttons ──
-       We calculate a wrapped target so the animation never crosses
-       the clone boundary mid-flight (which would cause a visual jump). */
     let rafId = null;
 
     function smoothScrollTo(target, duration) {
@@ -290,10 +291,9 @@
       const from  = track.scrollLeft;
       const delta = target - from;
       const t0    = performance.now();
-
       function step(now) {
         const p = Math.min((now - t0) / duration, 1);
-        const e = 1 - Math.pow(1 - p, 3); /* cubic ease-out */
+        const e = 1 - Math.pow(1 - p, 3);
         track.scrollLeft = from + delta * e;
         rafId = p < 1 ? requestAnimationFrame(step) : null;
       }
@@ -302,26 +302,25 @@
 
     if (btnLeft) {
       btnLeft.disabled = false;
-      btnLeft.addEventListener('click', () => {
+      btnLeft.onclick = () => {
         if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        let t = track.scrollLeft - CARD_W * 3;
-        if (t < SET_W) t += SET_W; /* wrap: stay inside real-card zone */
-        smoothScrollTo(t, 380);
-      });
+        let tgt = track.scrollLeft - CARD_W * 3;
+        if (tgt < SET_W) tgt += SET_W;
+        smoothScrollTo(tgt, 380);
+      };
     }
     if (btnRight) {
       btnRight.disabled = false;
-      btnRight.addEventListener('click', () => {
+      btnRight.onclick = () => {
         if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        let t = track.scrollLeft + CARD_W * 3;
-        if (t >= 2 * SET_W) t -= SET_W; /* wrap: stay inside real-card zone */
-        smoothScrollTo(t, 380);
-      });
+        let tgt = track.scrollLeft + CARD_W * 3;
+        if (tgt >= 2 * SET_W) tgt -= SET_W;
+        smoothScrollTo(tgt, 380);
+      };
     }
 
-    /* ── Drag to scroll (desktop) ── */
+    /* Drag to scroll (desktop) */
     let dragging = false, startX = 0, movedPx = 0;
-
     track.addEventListener('mousedown', e => {
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       dragging   = true;
@@ -336,15 +335,15 @@
       track.scrollLeft = dragOrigin - dx;
     });
     document.addEventListener('mouseup', () => { dragging = false; });
-
-    /* Block link navigation if the user was dragging */
     track.addEventListener('click', e => {
       if (movedPx > 5) { e.preventDefault(); movedPx = 0; }
     }, true);
-  })();
+  }
+
+  initMembersCarousel();
 
   /* ── 11. Gallery — full-bleed carousel ─────────────────────── */
-  (function () {
+  function initGalleryCarousel() {
     const stage   = document.getElementById('gal-stage');
     const prevBtn = document.getElementById('gal-prev');
     const nextBtn = document.getElementById('gal-next');
@@ -378,7 +377,6 @@
       resetAuto();
     }
 
-    /* Detect active slide from scroll position */
     function detectActive() {
       const stageCenter = stage.scrollLeft + stage.offsetWidth / 2;
       let closest = 0, minDist = Infinity;
@@ -399,10 +397,9 @@
       scrollTimeout = setTimeout(detectActive, 60);
     }, { passive: true });
 
-    if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
-    if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+    if (prevBtn) prevBtn.onclick = () => goTo(current - 1);
+    if (nextBtn) nextBtn.onclick = () => goTo(current + 1);
 
-    /* Auto-play */
     function resetAuto() {
       if (autoTimer) clearInterval(autoTimer);
       autoTimer = setInterval(() => goTo(current + 1), 5000);
@@ -435,16 +432,34 @@
       if (movedPx > 5) { e.preventDefault(); movedPx = 0; }
     }, true);
 
-    /* Keyboard */
     stage.setAttribute('tabindex', '0');
     stage.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(current - 1); }
       if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
     });
 
-    /* Init */
     requestAnimationFrame(() => { scrollToSlide(0); updateUI(); });
-  })();
+  }
+
+  initGalleryCarousel();
+
+  /* ── 12. Re-init carousels when dynamic content loads ──────── */
+  window.addEventListener('tmnk:content-loaded', () => {
+    initMembersCarousel();
+    initGalleryCarousel();
+
+    /* Re-apply scroll reveal to dynamically loaded elements */
+    const revealTargets = ['.member-card', '.event-card', '.gal-slide'];
+    revealTargets.forEach(selector => {
+      document.querySelectorAll(selector).forEach((el, i) => {
+        if (!el.classList.contains('reveal')) {
+          el.classList.add('reveal');
+          el.style.transitionDelay = (i * 55) + 'ms';
+          revealObserver.observe(el);
+        }
+      });
+    });
+  });
 
 
   /* -- Init -- */

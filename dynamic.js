@@ -1,11 +1,27 @@
 /* ============================================================
-   TMNK — Dynamic content loader
-   Fetches data from the API when server is running.
-   Falls back gracefully to static HTML if API is unavailable.
+   TMNK — Dynamic content loader  (Supabase edition)
+   Fetches members, events & gallery from Supabase REST API.
+   Falls back to static HTML if fetch fails.
+   Dispatches 'tmnk:content-loaded' so script.js can
+   (re-)initialise carousels after the DOM is populated.
    ============================================================ */
 (function () {
   'use strict';
 
+  /* ── Supabase config ──────────────────────────────────────── */
+  var SUPABASE_URL = 'https://lftsmwnbwcbyazqthdpe.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmdHNtd25id2NieWF6cXRoZHBlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMDY0NDgsImV4cCI6MjA5NDY4MjQ0OH0.QSPnUztG7qlDKa8Qh7edpx5KajZVCP4NZrmEnJ5p2bs';
+
+  function sbFetch(table, query) {
+    return fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + query, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      }
+    }).then(function (r) { return r.ok ? r.json() : []; });
+  }
+
+  /* ── Language helper ──────────────────────────────────────── */
   var LANG_KEY = 'tn-lang';
 
   function applyCurrentLang() {
@@ -16,87 +32,59 @@
     });
   }
 
+  /* ── Escape HTML to prevent XSS ───────────────────────────── */
+  function esc(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── Main loader ──────────────────────────────────────────── */
   async function loadContent() {
+    var results;
     try {
-      var test = await fetch('/api/public/members');
-      if (!test.ok) return;
+      results = await Promise.all([
+        sbFetch('members',  'active=eq.true&order=sort_order.asc'),
+        sbFetch('events',   'published=eq.true&order=date.desc'),
+        sbFetch('gallery',  'order=sort_order.asc,created_at.desc')
+      ]);
     } catch (e) {
-      return; // API not available, keep static HTML
+      console.warn('TMNK dynamic: Supabase fetch failed, keeping static HTML.', e);
+      window.dispatchEvent(new CustomEvent('tmnk:content-loaded'));
+      return;
     }
 
-    var data = await Promise.all([
-      fetch('/api/public/members').then(function (r) { return r.json(); }),
-      fetch('/api/public/projects').then(function (r) { return r.json(); }),
-      fetch('/api/public/gallery').then(function (r) { return r.json(); }),
-      fetch('/api/public/events').then(function (r) { return r.json(); }),
-      fetch('/api/public/settings').then(function (r) { return r.json(); })
-    ]);
+    var members = results[0];
+    var events  = results[1];
+    var gallery = results[2];
 
-    var members  = data[0];
-    var projects = data[1];
-    var gallery  = data[2];
-    var events   = data[3];
-    var settings = data[4];
-
-    // --- Members ---
+    /* ── Members ─────────────────────────────────────────────── */
     var track = document.getElementById('members-track');
     if (track && members.length) {
       track.innerHTML = members.map(function (m) {
         var initials = m.name.split(' ').map(function (w) { return w[0]; }).join('').toUpperCase();
-        var photoHTML = m.photo
-          ? '<img src="' + m.photo + '" alt="' + m.name + '" loading="lazy">'
-          : '<div class="mc-avatar">' + initials + '</div>';
-        var href = (m.link && m.link !== '#') ? m.link : '#';
-        var tgt = (m.link && m.link !== '#') ? ' target="_blank" rel="noopener"' : '';
+        var photoHTML = m.photo_url
+          ? '<img src="' + esc(m.photo_url) + '" alt="' + esc(m.name) + '" loading="lazy">'
+          : '<div class="mc-avatar">' + esc(initials) + '</div>';
+        var href = (m.portfolio_url && m.portfolio_url !== '#') ? esc(m.portfolio_url) : '#';
+        var tgt  = (m.portfolio_url && m.portfolio_url !== '#') ? ' target="_blank" rel="noopener"' : '';
         return '<a href="' + href + '"' + tgt + ' class="member-card">'
           + '<div class="mc-photo">' + photoHTML + '</div>'
-          + '<h3 class="mc-name">' + m.name + '</h3>'
-          + '<span class="mc-age">' + (m.age || '') + '</span>'
-          + '<p class="mc-role" data-et="' + m.role_et + '" data-en="' + m.role_en + '">' + m.role_et + '</p>'
+          + '<h3 class="mc-name">' + esc(m.name) + '</h3>'
+          + (m.age ? '<span class="mc-age">' + parseInt(m.age, 10) + '</span>' : '')
+          + '<p class="mc-role" data-et="' + esc(m.role) + '" data-en="' + esc(m.role_en) + '">' + esc(m.role) + '</p>'
           + '<span class="mc-hint" data-et="Vaata profiili &#8594;" data-en="View profile &#8594;">Vaata profiili &#8594;</span>'
           + '</a>';
       }).join('');
     }
 
-    // --- Projects ---
-    var cardsGrid = document.querySelector('.cards-grid');
-    if (cardsGrid && projects.length) {
-      cardsGrid.innerHTML = projects.map(function (p) {
-        return '<article class="card">'
-          + '<div class="card-icon">' + (p.icon || '') + '</div>'
-          + '<h3 data-et="' + p.title_et + '" data-en="' + (p.title_en || '') + '">' + p.title_et + '</h3>'
-          + '<p data-et="' + (p.desc_et || '') + '" data-en="' + (p.desc_en || '') + '">' + (p.desc_et || '') + '</p>'
-          + '<span class="tag" data-et="' + (p.tag_et || '') + '" data-en="' + (p.tag_en || '') + '">' + (p.tag_et || '') + '</span>'
-          + '</article>';
-      }).join('');
-    }
-
-    // --- Gallery ---
-    var galStage = document.getElementById('gal-stage');
-    if (galStage && gallery.length) {
-      galStage.innerHTML = gallery.map(function (g) {
-        var bg = g.gradient || 'var(--grad-icon-1)';
-        var visual = g.image
-          ? '<div class="gal-visual"><img src="' + g.image + '" alt="' + g.title_et + '"></div>'
-          : '<div class="gal-visual" style="background:' + bg + '"><span class="gal-emoji">' + (g.emoji || '') + '</span></div>';
-        return '<div class="gal-slide" data-gradient="' + (g.gradient || '') + '">'
-          + visual
-          + '<div class="gal-overlay">'
-          + '<span class="gal-tag" data-et="' + (g.tag_et || '') + '" data-en="' + (g.tag_en || '') + '">' + (g.tag_et || '') + '</span>'
-          + '<strong data-et="' + g.title_et + '" data-en="' + (g.title_en || '') + '">' + g.title_et + '</strong>'
-          + '<span data-et="' + (g.desc_et || '') + '" data-en="' + (g.desc_en || '') + '">' + (g.desc_et || '') + '</span>'
-          + '</div></div>';
-      }).join('');
-    }
-
-    // --- Events ---
+    /* ── Events ──────────────────────────────────────────────── */
     var eventsList = document.querySelector('.events-list');
     if (eventsList && events.length) {
-      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dets'];
+      var months = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dets'];
       eventsList.innerHTML = events.map(function (ev) {
-        var d = new Date(ev.event_date);
-        var day = String(d.getDate()).padStart(2, '0');
-        var mon = months[d.getMonth()];
+        var d    = new Date(ev.date);
+        var day  = String(d.getDate()).padStart(2, '0');
+        var mon  = months[d.getMonth()];
         var year = d.getFullYear();
         return '<article class="event-card">'
           + '<div class="event-date">'
@@ -104,38 +92,35 @@
           + '<span class="event-month">' + mon + '</span>'
           + '<span class="event-year">' + year + '</span></div>'
           + '<div class="event-body">'
-          + '<span class="tag" data-et="' + (ev.tag_et || '') + '" data-en="' + (ev.tag_en || '') + '">' + (ev.tag_et || '') + '</span>'
-          + '<h3 data-et="' + ev.title_et + '" data-en="' + (ev.title_en || '') + '">' + ev.title_et + '</h3>'
-          + '<p data-et="' + (ev.desc_et || '') + '" data-en="' + (ev.desc_en || '') + '">' + (ev.desc_et || '') + '</p>'
+          + '<h3 data-et="' + esc(ev.title) + '" data-en="' + esc(ev.title_en || '') + '">' + esc(ev.title) + '</h3>'
+          + '<p data-et="' + esc(ev.description || '') + '" data-en="' + esc(ev.description_en || '') + '">' + esc(ev.description || '') + '</p>'
           + '<div class="event-meta">'
-          + '<span>&#128205; <span data-et="' + (ev.location_et || '') + '" data-en="' + (ev.location_en || '') + '">' + (ev.location_et || '') + '</span></span>'
-          + '<span>&#128336; ' + (ev.time_text || '') + '</span>'
+          + (ev.location ? '<span>&#128205; ' + esc(ev.location) + '</span>' : '')
           + '</div></div></article>';
       }).join('');
     }
 
-    // --- Settings ---
-    if (settings) {
-      var pairs = [
-        ['.hero-text h1', 'hero_title'],
-        ['.hero-sub', 'hero_subtitle'],
-        ['.hero-desc', 'hero_desc']
-      ];
-      pairs.forEach(function (pair) {
-        var el = document.querySelector(pair[0]);
-        var key = settings[pair[1]];
-        if (el && key) {
-          el.setAttribute('data-et', key.et);
-          el.setAttribute('data-en', key.en);
-        }
-      });
+    /* ── Gallery ─────────────────────────────────────────────── */
+    var galStage = document.getElementById('gal-stage');
+    if (galStage && gallery.length) {
+      galStage.innerHTML = gallery.map(function (g) {
+        return '<div class="gal-slide">'
+          + '<div class="gal-visual"><img src="' + esc(g.image_url) + '" alt="' + esc(g.caption || '') + '" loading="lazy"></div>'
+          + '<div class="gal-overlay">'
+          + (g.album ? '<span class="gal-tag">' + esc(g.album) + '</span>' : '')
+          + (g.caption ? '<strong>' + esc(g.caption) + '</strong>' : '')
+          + '</div></div>';
+      }).join('');
     }
 
-    // Re-apply language to freshly rendered elements
+    /* Re-apply language to freshly rendered bilingual elements */
     applyCurrentLang();
+
+    /* Notify script.js that dynamic content is ready */
+    window.dispatchEvent(new CustomEvent('tmnk:content-loaded'));
   }
 
-  // Run after DOM is ready
+  /* Run after DOM is ready */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadContent);
   } else {

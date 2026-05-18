@@ -13,6 +13,8 @@ const emptyMember = {
   email: '',
   phone: '',
   photo_url: '',
+  portfolio_url: '',
+  age: '',
   sort_order: 0,
   active: true,
 }
@@ -184,6 +186,34 @@ export default function MemberForm() {
                 value={form.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent box-border"
+              />
+            </div>
+          </div>
+
+          {/* Portfolio & Age */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Portfolio URL
+              </label>
+              <input
+                type="url"
+                value={form.portfolio_url}
+                onChange={(e) => handleChange('portfolio_url', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent box-border"
+                placeholder="https://example.com"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Age
+              </label>
+              <input
+                type="number"
+                value={form.age}
+                onChange={(e) => handleChange('age', e.target.value ? parseInt(e.target.value) : '')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent box-border"
+                placeholder="e.g. 18"
               />
             </div>
           </div>
