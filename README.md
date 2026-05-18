@@ -1,47 +1,18 @@
 TMNK — Project setup and cleanup
 =================================
 
-This repository contains a small public website and an `admin` panel (Node/Express + PostgreSQL) used to manage content.
+This repository now contains the public/static TMNK website only. The previous `admin` panel and server components have been removed.
 
-Quick start (Admin + API)
+Quick start (Public site)
 -------------------------
-Prerequisites: Node.js (18+ recommended), npm, and PostgreSQL running.
+Open `index.html` in a browser to view the static site. Dynamic features that previously relied on the admin API are no longer available.
 
-1. Open a terminal and go to the `admin` folder:
+Files changed by this cleanup
+----------------------------
+- Removed the `admin/` server and UI components.
+- Updated `.gitignore` and documentation to reflect the cleanup.
 
-   cd admin
-
-2. Copy the example env and edit values if necessary:
-
-   copy .env.example .env   # Windows PowerShell
-   cp .env.example .env     # macOS / Linux
-
-3. Install dependencies and prepare the database:
-
-   npm install
-   npm run migrate
-   npm run seed
-
-4. Start the server:
-
-   npm start
-
-App will be available at http://localhost:3000 (Admin panel: /admin)
-
-Public site only
-----------------
-If you only want the static site without the API, open `index.html` in a browser. The site will display static content; dynamic features that fetch `/api` require the admin server.
-
-Files added/changed by this cleanup
-----------------------------------
-- README.md (this file)
-- .gitignore (top level)
-- admin/setup.ps1 and admin/setup.sh (helper scripts)
-- CLEANUP_PROPOSAL.md (suggested deletions — review before removing anything)
-
-Next steps and suggestions
---------------------------
-- Run the `admin/setup.ps1` (Windows) or `admin/setup.sh` to automate setup (they copy `.env.example`, install deps, migrate and seed DB).
-- Review `CLEANUP_PROPOSAL.md` and confirm any deletions before proceeding.
-
-If you want, I can: create a root `package.json` wrapper, remove files listed in the proposal, or wire a Docker setup for one-command startup.
+If you'd like, I can:
+- Restore a lightweight API for the public site,
+- Reintroduce admin functionality behind an optional subproject, or
+- Keep the repo minimal and remove any remaining setup files (confirm first).

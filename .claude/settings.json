@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch *)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\37253\\\\Documents\\\\programeerimine\\\\projektid\\\\TMNK\\\\.git\\\\index.lock\" -Force)",
+      "Bash(rm /c/Users/37253/Documents/programeerimine/projektid/TMNK/.git/index.lock && echo \"removed\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\37253\\Documents\\programeerimine\\projektid\\TMNK\\.git"
+    ]
+  }
+}
