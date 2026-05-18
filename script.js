@@ -16,8 +16,9 @@
   }
 
   function applyTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem(THEME_KEY, theme);
+    const resolved = theme === 'auto' ? getSystemTheme() : theme;
+    root.setAttribute('data-theme', resolved);
+    if (theme !== 'auto') localStorage.setItem(THEME_KEY, theme);
   }
 
   function initTheme() {
@@ -114,7 +115,9 @@
     '.card', '.stat', '.step', '.ci-item', '.value-row',
     '.ac', '.section-head', '.hero-text', '.about-text',
     '.contact-form', '.join-form', '.steps-row',
-    '.members-track-wrapper', '.members-nav'
+    '.members-track-wrapper', '.members-nav',
+    '.gal-navbar', '.gal',
+    '.event-card'
   ];
 
   const revealObserver = new IntersectionObserver(entries => {
@@ -340,7 +343,111 @@
     }, true);
   })();
 
-  /* ── Init ─────────────────────────────────────────────────── */
+  /* ── 11. Gallery — full-bleed carousel ─────────────────────── */
+  (function () {
+    const stage   = document.getElementById('gal-stage');
+    const prevBtn = document.getElementById('gal-prev');
+    const nextBtn = document.getElementById('gal-next');
+    const counter = document.getElementById('gal-counter');
+    const bar     = document.getElementById('gal-progress-bar');
+    if (!stage) return;
+
+    const slides = Array.from(stage.querySelectorAll('.gal-slide'));
+    const N = slides.length;
+    if (N === 0) return;
+
+    let current = 0;
+    let autoTimer = null;
+
+    function updateUI() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      if (counter) counter.textContent = (current + 1) + ' / ' + N;
+      if (bar)     bar.style.width = ((current + 1) / N * 100) + '%';
+    }
+
+    function scrollToSlide(idx) {
+      const slide = slides[idx];
+      if (!slide) return;
+      stage.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' });
+    }
+
+    function goTo(idx) {
+      current = ((idx % N) + N) % N;
+      scrollToSlide(current);
+      updateUI();
+      resetAuto();
+    }
+
+    /* Detect active slide from scroll position */
+    function detectActive() {
+      const stageCenter = stage.scrollLeft + stage.offsetWidth / 2;
+      let closest = 0, minDist = Infinity;
+      slides.forEach((s, i) => {
+        const center = s.offsetLeft + s.offsetWidth / 2;
+        const d = Math.abs(center - stageCenter);
+        if (d < minDist) { minDist = d; closest = i; }
+      });
+      if (closest !== current) {
+        current = closest;
+        updateUI();
+      }
+    }
+
+    let scrollTimeout = null;
+    stage.addEventListener('scroll', () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(detectActive, 60);
+    }, { passive: true });
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    /* Auto-play */
+    function resetAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo(current + 1), 5000);
+    }
+    resetAuto();
+
+    stage.addEventListener('mouseenter', () => { if (autoTimer) clearInterval(autoTimer); });
+    stage.addEventListener('mouseleave', resetAuto);
+
+    /* Drag support */
+    let dragging = false, dragStartX = 0, dragScrollLeft = 0, movedPx = 0;
+    stage.addEventListener('mousedown', e => {
+      dragging = true; dragStartX = e.clientX;
+      dragScrollLeft = stage.scrollLeft; movedPx = 0;
+      stage.style.scrollBehavior = 'auto';
+    });
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const dx = e.clientX - dragStartX;
+      movedPx = Math.abs(dx);
+      stage.scrollLeft = dragScrollLeft - dx;
+    });
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      stage.style.scrollBehavior = '';
+      detectActive();
+    });
+    stage.addEventListener('click', e => {
+      if (movedPx > 5) { e.preventDefault(); movedPx = 0; }
+    }, true);
+
+    /* Keyboard */
+    stage.setAttribute('tabindex', '0');
+    stage.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(current - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
+    });
+
+    /* Init */
+    requestAnimationFrame(() => { scrollToSlide(0); updateUI(); });
+  })();
+
+
+  /* -- Init -- */
   initTheme();
   initLang();
 

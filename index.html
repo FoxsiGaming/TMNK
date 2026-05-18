@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tartumaa Noortekogu</title>
+  <title>Tartumaa Noortekogu — Tartumaa noorte hääl ja esindus</title>
+  <meta name="description" content="Tartumaa Noortekogu esindab Tartumaa noori, korraldab üritusi, viib ellu projekte ja osaleb otsuste tegemisel." />
+  <meta name="keywords" content="Tartumaa, noortekogu, noored, youth council, Tartu, Estonia" />
+  <meta name="author" content="Tartumaa Noortekogu" />
+  <meta property="og:title" content="Tartumaa Noortekogu" />
+  <meta property="og:description" content="Tartumaa noorte hääl ja esindus" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#2563B0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -33,6 +40,8 @@
       <nav class="nav-links" id="nav-links">
         <a href="#home"     data-et="Avaleht"      data-en="Home">Avaleht</a>
         <a href="#projects" data-et="Projektid"    data-en="Projects">Projektid</a>
+        <a href="#gallery"  data-et="Galerii"        data-en="Gallery">Galerii</a>
+        <a href="#events"   data-et="Sündmused"     data-en="Events">Sündmused</a>
         <a href="#about"    data-et="Meist"         data-en="About Us">Meist</a>
         <a href="#members"  data-et="Liikmed"       data-en="Members">Liikmed</a>
         <a href="#contact"  data-et="Kontakt"       data-en="Contact">Kontakt</a>
@@ -207,6 +216,203 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════ GALLERY ════════════════════════════ -->
+  <section id="gallery" class="section gallery-section">
+
+    <!-- Compact nav bar header -->
+    <div class="gal-navbar">
+      <div class="gal-navbar-inner">
+        <div class="gal-navbar-left">
+          <span class="gal-navbar-badge">&#128247;</span>
+          <h2 data-et="Hetked meie tegevustest" data-en="Moments from Our Activities">Hetked meie tegevustest</h2>
+        </div>
+        <div class="gal-navbar-right">
+          <span class="gal-counter" id="gal-counter">1 / 6</span>
+          <div class="gal-progress">
+            <div class="gal-progress-bar" id="gal-progress-bar"></div>
+          </div>
+          <button class="gal-arrow gal-arrow-nav gal-prev" id="gal-prev" aria-label="Eelmine">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="gal-arrow gal-arrow-nav gal-next" id="gal-next" aria-label="Järgmine">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-bleed carousel -->
+    <div class="gal" id="gallery-root">
+      <div class="gal-stage" id="gal-stage">
+
+        <div class="gal-slide" data-gradient="var(--grad-icon-1)">
+          <div class="gal-visual" style="background:var(--grad-icon-1)">
+            <span class="gal-emoji">&#127919;</span>
+          </div>
+          <div class="gal-overlay">
+            <span class="gal-tag" data-et="Üritus" data-en="Event">Üritus</span>
+            <strong data-et="Noortefoorum 2025" data-en="Youth Forum 2025">Noortefoorum 2025</strong>
+            <span data-et="Tartumaa noored arutamas tuleviku üle" data-en="Tartumaa youth discussing the future">Tartumaa noored arutamas tuleviku üle</span>
+          </div>
+        </div>
+
+        <div class="gal-slide" data-gradient="var(--grad-icon-2)">
+          <div class="gal-visual" style="background:var(--grad-icon-2)">
+            <span class="gal-emoji">&#127807;</span>
+          </div>
+          <div class="gal-overlay">
+            <span class="gal-tag" data-et="Keskkond" data-en="Environment">Keskkond</span>
+            <strong data-et="Roheline Tartumaa koristustalgu" data-en="Green Tartumaa Clean-up">Roheline Tartumaa koristustalgu</strong>
+            <span data-et="Vabatahtlikud puhastamas Emajõe kallast" data-en="Volunteers cleaning the Emajõgi riverbank">Vabatahtlikud puhastamas Emajõe kallast</span>
+          </div>
+        </div>
+
+        <div class="gal-slide" data-gradient="linear-gradient(135deg, #F5A623, #22A86A)">
+          <div class="gal-visual" style="background:linear-gradient(135deg, #F5A623, #22A86A)">
+            <span class="gal-emoji">&#128161;</span>
+          </div>
+          <div class="gal-overlay">
+            <span class="gal-tag" data-et="Haridus" data-en="Education">Haridus</span>
+            <strong data-et="Ettevõtluspäev" data-en="Entrepreneurship Day">Ettevõtluspäev</strong>
+            <span data-et="Noored ettevõtjad esitlemas oma äriideid" data-en="Young entrepreneurs pitching their business ideas">Noored ettevõtjad esitlemas oma äriideid</span>
+          </div>
+        </div>
+
+        <div class="gal-slide" data-gradient="var(--grad-icon-4)">
+          <div class="gal-visual" style="background:var(--grad-icon-4)">
+            <span class="gal-emoji">&#129309;</span>
+          </div>
+          <div class="gal-overlay">
+            <span class="gal-tag" data-et="Kogukond" data-en="Community">Kogukond</span>
+            <strong data-et="Vabatahtlike päev" data-en="Volunteer Day">Vabatahtlike päev</strong>
+            <span data-et="Kogukonna ühistegevus Tartumaal" data-en="Community activities across Tartumaa">Kogukonna ühistegevus Tartumaal</span>
+          </div>
+        </div>
+
+        <div class="gal-slide" data-gradient="var(--grad-icon-5)">
+          <div class="gal-visual" style="background:var(--grad-icon-5)">
+            <span class="gal-emoji">&#127917;</span>
+          </div>
+          <div class="gal-overlay">
+            <span class="gal-tag" data-et="Kultuur" data-en="Culture">Kultuur</span>
+            <strong data-et="Kultuurikuu gala" data-en="Culture Month Gala">Kultuurikuu gala</strong>
+            <span data-et="Noored loojad laval" data-en="Young creators on stage">Noored loojad laval</span>
+          </div>
+        </div>
+
+        <div class="gal-slide" data-gradient="var(--grad-icon-6)">
+          <div class="gal-visual" style="background:var(--grad-icon-6)">
+            <span class="gal-emoji">&#127942;</span>
+          </div>
+          <div class="gal-overlay">
+            <span class="gal-tag" data-et="Sport" data-en="Sports">Sport</span>
+            <strong data-et="Sportlik väljakutse" data-en="Sports Challenge">Sportlik väljakutse</strong>
+            <span data-et="Meeskonnatöö ja tervislik eluviis" data-en="Teamwork and healthy living">Meeskonnatöö ja tervislik eluviis</span>
+          </div>
+        </div>
+
+      </div><!-- /gal-stage -->
+    </div><!-- /gal -->
+  </section>
+
+  <!-- ════════════════════════ EVENTS ═══════════════════════════════ -->
+  <section id="events" class="section events-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-et="Sündmused" data-en="Events">Sündmused</p>
+        <h2 data-et="Tulevased üritused" data-en="Upcoming Events">Tulevased üritused</h2>
+        <p data-et="Vaata, mis meil tulemas on"
+           data-en="See what we have coming up">
+          Vaata, mis meil tulemas on
+        </p>
+      </div>
+
+      <div class="events-list">
+
+        <article class="event-card">
+          <div class="event-date">
+            <span class="event-day">15</span>
+            <span class="event-month" data-et="Jun" data-en="Jun">Jun</span>
+            <span class="event-year">2026</span>
+          </div>
+          <div class="event-body">
+            <span class="tag" data-et="Üritus" data-en="Event">Üritus</span>
+            <h3 data-et="Noortefoorum 2026" data-en="Youth Forum 2026">Noortefoorum 2026</h3>
+            <p data-et="Iga-aastane foorum Tartu Ülikooli peahoones, kus noored arutavad hariduse ja keskkonna teemasid."
+               data-en="Annual forum at the University of Tartu main building where youth discuss education and environmental topics.">
+              Iga-aastane foorum Tartu Ülikooli peahoones, kus noored arutavad hariduse ja keskkonna teemasid.
+            </p>
+            <div class="event-meta">
+              <span>&#128205; <span data-et="Tartu Ülikool" data-en="University of Tartu">Tartu Ülikool</span></span>
+              <span>&#128336; 10:00–16:00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-date">
+            <span class="event-day">28</span>
+            <span class="event-month" data-et="Jun" data-en="Jun">Jun</span>
+            <span class="event-year">2026</span>
+          </div>
+          <div class="event-body">
+            <span class="tag" data-et="Keskkond" data-en="Environment">Keskkond</span>
+            <h3 data-et="Suvine koristustalgu" data-en="Summer Clean-up Day">Suvine koristustalgu</h3>
+            <p data-et="Liituge meiega Emajõe äärsete alade puhastamisel ja puude istutamisel."
+               data-en="Join us in cleaning up areas along the Emajõgi river and planting trees.">
+              Liituge meiega Emajõe äärsete alade puhastamisel ja puude istutamisel.
+            </p>
+            <div class="event-meta">
+              <span>&#128205; <span data-et="Emajõe kaldapealne" data-en="Emajõgi Riverbank">Emajõe kaldapealne</span></span>
+              <span>&#128336; 09:00–13:00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-date">
+            <span class="event-day">12</span>
+            <span class="event-month" data-et="Jul" data-en="Jul">Jul</span>
+            <span class="event-year">2026</span>
+          </div>
+          <div class="event-body">
+            <span class="tag" data-et="Haridus" data-en="Education">Haridus</span>
+            <h3 data-et="Ettevõtluse suvelaager" data-en="Entrepreneurship Summer Camp">Ettevõtluse suvelaager</h3>
+            <p data-et="Kolmepäevane laager noortele, kes soovivad arendada ettevõtlusoskusi ja luua oma äriplaane."
+               data-en="A three-day camp for young people who want to develop entrepreneurial skills and create their own business plans.">
+              Kolmepäevane laager noortele, kes soovivad arendada ettevõtlusoskusi ja luua oma äriplaane.
+            </p>
+            <div class="event-meta">
+              <span>&#128205; <span data-et="Tartumaa Noortekeskus" data-en="Tartumaa Youth Centre">Tartumaa Noortekeskus</span></span>
+              <span>&#128336; 12.–14. juuli</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="event-card">
+          <div class="event-date">
+            <span class="event-day">08</span>
+            <span class="event-month" data-et="Aug" data-en="Aug">Aug</span>
+            <span class="event-year">2026</span>
+          </div>
+          <div class="event-body">
+            <span class="tag" data-et="Sport" data-en="Sports">Sport</span>
+            <h3 data-et="Noorte spordipäev" data-en="Youth Sports Day">Noorte spordipäev</h3>
+            <p data-et="Sportlikud võistlused ja meeskonnamängud Tartumaa noortele — tule ja proovi erinevaid spordialasid!"
+               data-en="Sports competitions and team games for Tartumaa youth — come try different sports!">
+              Sportlikud võistlused ja meeskonnamängud Tartumaa noortele — tule ja proovi erinevaid spordialasid!
+            </p>
+            <div class="event-meta">
+              <span>&#128205; <span data-et="Tartu Spordihall" data-en="Tartu Sports Hall">Tartu Spordihall</span></span>
+              <span>&#128336; 11:00–17:00</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════════════════════ ABOUT ══════════════════════════════ -->
   <section id="about" class="section about-section">
     <div class="container about-grid">
@@ -296,83 +502,85 @@
 
           <a href="#" class="member-card">
             <div class="mc-photo">
-              <div class="mc-avatar">MT</div>
+              <img src="profiles/MiiaUibo.jpg" alt="Miia Uibo" loading="lazy">
             </div>
-            <h3 class="mc-name">Mari Tamm</h3>
-            <span class="mc-age">21</span>
+            <h3 class="mc-name">Miia Uibo</h3>
+            <span class="mc-age">23</span>
             <p class="mc-role" data-et="Esimees" data-en="Chair">Esimees</p>
             <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
           </a>
 
           <a href="#" class="member-card">
             <div class="mc-photo">
-              <div class="mc-avatar">JK</div>
+              <div class="mc-avatar">AK</div>
             </div>
-            <h3 class="mc-name">Jaan Kask</h3>
-            <span class="mc-age">20</span>
-            <p class="mc-role" data-et="Aseesimees" data-en="Vice Chair">Aseesimees</p>
+            <h3 class="mc-name">Arhe Kala</h3>
+            <span class="mc-age">23</span>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          <a href="https://foxsigaming.github.io/portfolio/" target="_blank" rel="noopener" class="member-card">
+            <div class="mc-photo">
+              <img src="profiles/KaarelLeetsaar.png" alt="Kaarel Leetsaar" loading="lazy">
+            </div>
+            <h3 class="mc-name">Kaarel Leetsaar</h3>
+            <span class="mc-age">17</span>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
             <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
           </a>
 
           <a href="#" class="member-card">
             <div class="mc-photo">
-              <div class="mc-avatar">AS</div>
+              <img src="profiles/ViktoriaKivirand.jpg" alt="Viktoria Kivirand" loading="lazy">
             </div>
-            <h3 class="mc-name">Anna Sepp</h3>
-            <span class="mc-age">19</span>
-            <p class="mc-role" data-et="Sekretär" data-en="Secretary">Sekretär</p>
-            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
-          </a>
-
-          <a href="#" class="member-card">
-            <div class="mc-photo">
-              <div class="mc-avatar">KM</div>
-            </div>
-            <h3 class="mc-name">Kristoffer Mägi</h3>
-            <span class="mc-age">22</span>
-            <p class="mc-role" data-et="Projektijuht" data-en="Project Lead">Projektijuht</p>
-            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
-          </a>
-
-          <a href="#" class="member-card">
-            <div class="mc-photo">
-              <div class="mc-avatar">LP</div>
-            </div>
-            <h3 class="mc-name">Liisa Pärn</h3>
+            <h3 class="mc-name">Viktoria Kivirand</h3>
             <span class="mc-age">18</span>
-            <p class="mc-role" data-et="Kommunikatsioon" data-en="Communications">Kommunikatsioon</p>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
             <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
           </a>
 
           <a href="#" class="member-card">
             <div class="mc-photo">
-              <div class="mc-avatar">ML</div>
+              <div class="mc-avatar">MRS</div>
             </div>
-            <h3 class="mc-name">Mihkel Leinonen</h3>
-            <span class="mc-age">20</span>
-            <p class="mc-role" data-et="Noorteesindaja" data-en="Youth Rep">Noorteesindaja</p>
+            <h3 class="mc-name">Mart Robert Stümper</h3>
+            <span class="mc-age">18</span>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
             <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
           </a>
 
           <a href="#" class="member-card">
             <div class="mc-photo">
-              <div class="mc-avatar">KN</div>
+              <img src="profiles/KaireMuinasmaa.jpg" alt="Kaire Muinasmaa" loading="lazy">
             </div>
-            <h3 class="mc-name">Kadri Nurm</h3>
-            <span class="mc-age">19</span>
-            <p class="mc-role" data-et="Ürituste koordinaator" data-en="Events Coordinator">Ürituste koordinaator</p>
+            <h3 class="mc-name">Kaire Muinasmaa</h3>
+            <span class="mc-age">18</span>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
             <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
           </a>
 
           <a href="#" class="member-card">
             <div class="mc-photo">
-              <div class="mc-avatar">TR</div>
+              <div class="mc-avatar">MG</div>
             </div>
-            <h3 class="mc-name">Tõnis Rebane</h3>
-            <span class="mc-age">21</span>
-            <p class="mc-role" data-et="Vabatahtlike koordinaator" data-en="Volunteer Coordinator">Vabatahtlike koordinaator</p>
+            <h3 class="mc-name">Marie Gordeeva</h3>
+            <span class="mc-age">17</span>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
             <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
           </a>
+
+          <a href="#" class="member-card">
+            <div class="mc-photo">
+              <div class="mc-avatar">RP</div>
+            </div>
+            <h3 class="mc-name">Reelika Punkar</h3>
+            <span class="mc-age">24</span>
+            <p class="mc-role" data-et="Liige" data-en="Member">Liige</p>
+            <span class="mc-hint" data-et="Vaata profiili →" data-en="View profile →">Vaata profiili →</span>
+          </a>
+
+          
 
         </div><!-- /members-track -->
       </div><!-- /members-track-wrapper -->
@@ -553,11 +761,14 @@
         <strong data-et="Kiirlingid" data-en="Quick Links">Kiirlingid</strong>
         <a href="#home"     data-et="Avaleht"     data-en="Home">Avaleht</a>
         <a href="#projects" data-et="Projektid"   data-en="Projects">Projektid</a>
+        <a href="#gallery"  data-et="Galerii"       data-en="Gallery">Galerii</a>
+        <a href="#events"   data-et="Sündmused"    data-en="Events">Sündmused</a>
         <a href="#about"    data-et="Meist"        data-en="About Us">Meist</a>
         <a href="#members"  data-et="Liikmed"      data-en="Members">Liikmed</a>
         <a href="#contact"  data-et="Kontakt"      data-en="Contact">Kontakt</a>
         <a href="#join"     data-et="Liitu"        data-en="Join">Liitu</a>
       </nav>
+
 
       <div class="footer-contact">
         <strong data-et="Kontakt" data-en="Contact">Kontakt</strong>
@@ -577,5 +788,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="dynamic.js"></script>
 </body>
 </html>
