@@ -1056,27 +1056,23 @@ img { max-width: 100%; display: block; }
 .gallery-section {
   background: var(--bg);
   overflow: hidden;
-  padding: 0;            /* remove default section padding — navbar handles top */
-  padding-bottom: 0;
+  padding: 3rem 1.5rem 4rem;
 }
 
 /* ── Gallery nav bar ── */
 .gal-navbar {
   position: relative;
   z-index: 5;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  max-width: 1200px;
+  margin: 0 auto 1.25rem;
 }
 .gal-navbar-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: .75rem 1.5rem;
+  padding: .75rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 .gal-navbar-left {
   display: flex;
@@ -1164,11 +1160,13 @@ img { max-width: 100%; display: block; }
 .gal {
   position: relative;
   z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .gal-stage {
   display: flex;
-  gap: 6px;
+  gap: 12px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -ms-overflow-style: none;
@@ -1176,11 +1174,12 @@ img { max-width: 100%; display: block; }
   padding: 0;
   cursor: grab;
   scroll-behavior: smooth;
+  border-radius: 16px;
 }
 .gal-stage:active { cursor: grabbing; }
 .gal-stage::-webkit-scrollbar { display: none; }
 
-/* Each slide — full viewport width */
+/* Each slide — constrained to container width */
 .gal-slide {
   flex: 0 0 100%;
   scroll-snap-align: center;
@@ -1188,15 +1187,16 @@ img { max-width: 100%; display: block; }
   position: relative;
   transition: opacity .5s cubic-bezier(.4,0,.2,1);
   opacity: .4;
+  border-radius: 16px;
 }
 .gal-slide.active {
   opacity: 1;
 }
 
-/* Visual area — taller for full impact */
+/* Visual area */
 .gal-visual {
   width: 100%;
-  aspect-ratio: 21 / 9;
+  aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
   position: relative;
@@ -1267,14 +1267,13 @@ img { max-width: 100%; display: block; }
 }
 
 /* ── Gallery responsive ── */
-@media (max-width: 960px) {
-  .gal-visual { aspect-ratio: 16 / 9; }
-}
 @media (max-width: 680px) {
-  .gal-navbar-inner { padding: .6rem 1rem; }
+  .gallery-section { padding: 2rem 1rem 3rem; }
   .gal-navbar h2 { font-size: .88rem; }
   .gal-navbar-badge { width: 30px; height: 30px; font-size: .95rem; border-radius: 8px; }
   .gal-progress { width: 50px; }
+  .gal-stage { border-radius: 12px; }
+  .gal-slide { border-radius: 12px; }
   .gal-visual { aspect-ratio: 4 / 3; }
   .gal-emoji { font-size: 3.5rem; }
   .gal-overlay { padding: 1.5rem 1.25rem 1.25rem; }
@@ -1287,7 +1286,98 @@ img { max-width: 100%; display: block; }
 /* ── Events ──────────────────────────────────────────────────── */
 .events-section {
   background: var(--bg-alt);
+  overflow: clip;
+  padding: 0;
+}
+
+/* ── Scroll-pinned events (activated by JS when > 5 cards) ── */
+.events-scroll-outer {
+  position: relative;
+}
+.events-sticky {
+  padding: 7rem 0;
+  position: relative;
+}
+.events-section.scroll-pinned .events-scroll-outer {
+  /* height set dynamically by JS */
+}
+.events-section.scroll-pinned .events-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0;
   overflow: hidden;
+}
+.events-section.scroll-pinned .events-sticky > .container {
+  width: 100%;
+}
+
+/* When pinned, only show a window of cards */
+.events-section.scroll-pinned .events-list {
+  overflow: hidden;
+}
+.events-section.scroll-pinned .event-card {
+  transition: opacity .4s cubic-bezier(.4,0,.2,1),
+              max-height .4s cubic-bezier(.4,0,.2,1),
+              margin .4s cubic-bezier(.4,0,.2,1),
+              padding .4s cubic-bezier(.4,0,.2,1),
+              transform .4s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.events-section.scroll-pinned .event-card[data-state="above"],
+.events-section.scroll-pinned .event-card[data-state="below"] {
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-color: transparent;
+  pointer-events: none;
+  transform: scale(.97);
+}
+.events-section.scroll-pinned .event-card[data-state="visible"] {
+  opacity: 1;
+  max-height: 300px;
+  transform: scale(1);
+}
+/* Override .reveal styles when scroll-pin controls visibility */
+.events-section.scroll-pinned .event-card.reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity .4s cubic-bezier(.4,0,.2,1),
+              max-height .4s cubic-bezier(.4,0,.2,1),
+              margin .4s cubic-bezier(.4,0,.2,1),
+              padding .4s cubic-bezier(.4,0,.2,1),
+              transform .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* Progress dots for pinned scroll */
+.events-progress {
+  display: none;
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+.events-section.scroll-pinned .events-progress {
+  display: flex;
+}
+.events-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background .3s, transform .3s;
+}
+.events-progress-dot.active {
+  background: var(--accent);
+  transform: scale(1.4);
 }
 .events-section::before {
   content: '';
@@ -1435,6 +1525,8 @@ img { max-width: 100%; display: block; }
     padding: .5rem 1rem;
   }
   .event-day { font-size: 1.5rem; }
+  .events-progress { right: .75rem; }
+  .events-sticky { padding: 4rem 0; }
 }
 
 /* ── Footer ──────────────────────────────────────────────────── */

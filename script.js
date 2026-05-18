@@ -448,8 +448,11 @@
     initMembersCarousel();
     initGalleryCarousel();
 
-    /* Re-apply scroll reveal to dynamically loaded elements */
-    const revealTargets = ['.member-card', '.event-card', '.gal-slide'];
+    /* Re-apply scroll reveal to dynamically loaded elements
+       (skip event-cards if scroll-pin is active — it handles its own visibility) */
+    const pinned = document.querySelector('.events-section.scroll-pinned');
+    const revealTargets = ['.member-card', '.gal-slide'];
+    if (!pinned) revealTargets.push('.event-card');
     revealTargets.forEach(selector => {
       document.querySelectorAll(selector).forEach((el, i) => {
         if (!el.classList.contains('reveal')) {
@@ -461,6 +464,86 @@
     });
   });
 
+
+  /* ── 13. Events scroll-pin (when > 5 cards) ─────────────────── */
+  function initEventsScrollPin() {
+    const section    = document.querySelector('.events-section');
+    const outer      = document.querySelector('.events-scroll-outer');
+    const list       = document.querySelector('.events-list');
+    const progressEl = document.getElementById('events-progress');
+    if (!section || !outer || !list) return;
+
+    const cards = Array.from(list.querySelectorAll('.event-card'));
+    const THRESHOLD = 5;
+
+    /* Clean up previous init */
+    section.classList.remove('scroll-pinned');
+    outer.style.height = '';
+    if (progressEl) progressEl.innerHTML = '';
+    cards.forEach(c => { delete c.dataset.state; });
+
+    if (cards.length <= THRESHOLD) return;
+
+    /* Activate pinned mode */
+    section.classList.add('scroll-pinned');
+
+    const VISIBLE_COUNT = 3;               /* cards shown at once */
+    const SCROLL_PER_CARD = 280;           /* px of scroll per card step */
+    const totalSteps = cards.length - VISIBLE_COUNT + 1;
+    const extraHeight = totalSteps * SCROLL_PER_CARD;
+
+    /* Outer wrapper needs to be tall enough to create scroll room */
+    outer.style.height = (window.innerHeight + extraHeight) + 'px';
+
+    /* Build progress dots */
+    if (progressEl) {
+      cards.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'events-progress-dot';
+        progressEl.appendChild(dot);
+      });
+    }
+
+    /* Scroll handler */
+    function onScroll() {
+      const rect = outer.getBoundingClientRect();
+      /* progress 0→1 as outer scrolls through */
+      const rawProgress = -rect.top / extraHeight;
+      const progress = Math.max(0, Math.min(1, rawProgress));
+
+      /* Which card index is "first visible" */
+      const firstVisible = Math.round(progress * (totalSteps - 1));
+
+      cards.forEach((card, i) => {
+        if (i < firstVisible) {
+          card.dataset.state = 'above';
+        } else if (i >= firstVisible + VISIBLE_COUNT) {
+          card.dataset.state = 'below';
+        } else {
+          card.dataset.state = 'visible';
+        }
+      });
+
+      /* Update progress dots */
+      if (progressEl) {
+        const dots = progressEl.children;
+        for (let i = 0; i < dots.length; i++) {
+          dots[i].classList.toggle('active', i >= firstVisible && i < firstVisible + VISIBLE_COUNT);
+        }
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); /* initial state */
+  }
+
+  initEventsScrollPin();
+
+  /* Re-init events scroll-pin when dynamic content loads */
+  window.addEventListener('tmnk:content-loaded', () => {
+    /* Small delay to let DOM settle */
+    requestAnimationFrame(initEventsScrollPin);
+  });
 
   /* -- Init -- */
   initTheme();
