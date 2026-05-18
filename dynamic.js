@@ -104,11 +104,13 @@
     var galStage = document.getElementById('gal-stage');
     if (galStage && gallery.length) {
       galStage.innerHTML = gallery.map(function (g) {
+        var meta = [g.place, g.photo_date].filter(Boolean).join(' · ');
         return '<div class="gal-slide">'
-          + '<div class="gal-visual"><img src="' + esc(g.image_url) + '" alt="' + esc(g.caption || '') + '" loading="lazy"></div>'
+          + '<div class="gal-visual"><img src="' + esc(g.image_url) + '" alt="' + esc(g.title || g.caption || '') + '" loading="lazy"></div>'
           + '<div class="gal-overlay">'
           + (g.album ? '<span class="gal-tag">' + esc(g.album) + '</span>' : '')
-          + (g.caption ? '<strong>' + esc(g.caption) + '</strong>' : '')
+          + (g.title ? '<strong>' + esc(g.title) + '</strong>' : '')
+          + (meta ? '<span class="gal-meta">' + esc(meta) + '</span>' : '')
           + '</div></div>';
       }).join('');
     }

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Upload, Trash2, X, FolderPlus } from 'lucide-react'
+import { Upload, Trash2, X, FolderPlus, Pencil } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 export default function Gallery() {
@@ -10,7 +10,7 @@ export default function Gallery() {
   const [albums, setAlbums] = useState([])
   const [newAlbum, setNewAlbum] = useState('')
   const [showAlbumInput, setShowAlbumInput] = useState(false)
-  const [editingCaption, setEditingCaption] = useState(null)
+  const [editingId, setEditingId] = useState(null)
   const [selectedImages, setSelectedImages] = useState(new Set())
   const [lightbox, setLightbox] = useState(null)
   const inputRef = useRef(null)
@@ -63,7 +63,10 @@ export default function Gallery() {
 
       await supabase.from('gallery').insert({
         image_url: urlData.publicUrl,
-        caption: file.name.replace(/\.[^/.]+$/, ''),
+        caption: '',
+        title: '',
+        place: '',
+        photo_date: null,
         album: album,
       })
     }
@@ -81,9 +84,22 @@ export default function Gallery() {
     uploadFiles(Array.from(e.target.files))
   }
 
-  const updateCaption = async (id, caption, captionEn) => {
-    await supabase.from('gallery').update({ caption, caption_en: captionEn }).eq('id', id)
-    setEditingCaption(null)
+  const updateImage = async (id) => {
+    const title = document.getElementById(`title-${id}`)?.value || ''
+    const place = document.getElementById(`place-${id}`)?.value || ''
+    const photoDate = document.getElementById(`date-${id}`)?.value || null
+    const caption = document.getElementById(`caption-et-${id}`)?.value || ''
+    const captionEn = document.getElementById(`caption-en-${id}`)?.value || ''
+
+    await supabase.from('gallery').update({
+      title,
+      place,
+      photo_date: photoDate || null,
+      caption,
+      caption_en: captionEn,
+    }).eq('id', id)
+
+    setEditingId(null)
     fetchImages()
   }
 
@@ -260,17 +276,37 @@ export default function Gallery() {
                   </button>
                 </div>
 
-                {/* Caption */}
+                {/* Details */}
                 <div className="p-2">
-                  {editingCaption === img.id ? (
+                  {editingId === img.id ? (
                     <div className="space-y-1">
+                      <input
+                        type="text"
+                        defaultValue={img.title || ''}
+                        id={`title-${img.id}`}
+                        placeholder="Title"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 box-border"
+                        autoFocus
+                      />
+                      <input
+                        type="text"
+                        defaultValue={img.place || ''}
+                        id={`place-${img.id}`}
+                        placeholder="Place"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 box-border"
+                      />
+                      <input
+                        type="date"
+                        defaultValue={img.photo_date || ''}
+                        id={`date-${img.id}`}
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 box-border"
+                      />
                       <input
                         type="text"
                         defaultValue={img.caption || ''}
                         id={`caption-et-${img.id}`}
                         placeholder="Caption (ET)"
                         className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 box-border"
-                        autoFocus
                       />
                       <input
                         type="text"
@@ -281,17 +317,13 @@ export default function Gallery() {
                       />
                       <div className="flex gap-1">
                         <button
-                          onClick={() => {
-                            const et = document.getElementById(`caption-et-${img.id}`).value
-                            const en = document.getElementById(`caption-en-${img.id}`).value
-                            updateCaption(img.id, et, en)
-                          }}
+                          onClick={() => updateImage(img.id)}
                           className="flex-1 px-2 py-1 bg-indigo-600 text-white rounded text-xs cursor-pointer border-none"
                         >
                           Save
                         </button>
                         <button
-                          onClick={() => setEditingCaption(null)}
+                          onClick={() => setEditingId(null)}
                           className="px-2 py-1 text-gray-500 rounded text-xs cursor-pointer border border-gray-300 bg-white"
                         >
                           Cancel
@@ -299,13 +331,20 @@ export default function Gallery() {
                       </div>
                     </div>
                   ) : (
-                    <p
-                      onClick={() => setEditingCaption(img.id)}
-                      className="text-xs text-gray-500 truncate cursor-pointer hover:text-gray-700"
-                      title="Click to edit caption"
+                    <div
+                      onClick={() => setEditingId(img.id)}
+                      className="cursor-pointer hover:bg-gray-50 rounded -m-1 p-1"
+                      title="Click to edit details"
                     >
-                      {img.caption || 'Add caption...'}
-                    </p>
+                      <p className="text-xs font-medium text-gray-700 truncate">
+                        {img.title || <span className="text-gray-400 italic">No title</span>}
+                      </p>
+                      {(img.place || img.photo_date) && (
+                        <p className="text-xs text-gray-400 truncate">
+                          {[img.place, img.photo_date].filter(Boolean).join(' · ')}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
@@ -332,10 +371,16 @@ export default function Gallery() {
             className="max-w-full max-h-[90vh] object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()}
           />
-          {lightbox.caption && (
-            <p className="absolute bottom-8 text-white text-sm bg-black/50 px-4 py-2 rounded-lg">
-              {lightbox.caption}
-            </p>
+          {(lightbox.title || lightbox.caption || lightbox.place || lightbox.photo_date) && (
+            <div className="absolute bottom-8 text-white text-sm bg-black/50 px-4 py-2 rounded-lg text-center">
+              {lightbox.title && <p className="font-medium">{lightbox.title}</p>}
+              {lightbox.caption && <p>{lightbox.caption}</p>}
+              {(lightbox.place || lightbox.photo_date) && (
+                <p className="text-xs text-gray-300 mt-1">
+                  {[lightbox.place, lightbox.photo_date].filter(Boolean).join(' · ')}
+                </p>
+              )}
+            </div>
           )}
         </div>
       )}
