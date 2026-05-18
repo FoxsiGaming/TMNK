@@ -52,7 +52,9 @@
   --transition:    .25s ease;
 }
 
-[data-theme="dark"] {
+/* Dark mode — single source of truth for both explicit toggle and system preference */
+[data-theme="dark"],
+:root:not([data-theme="light"]):is(.prefers-dark) {
   --accent:        #4B8EDE;
   --accent-hover:  #D6E8FA;
   --accent-light:  #0d1e38;

@@ -16,8 +16,9 @@
   }
 
   function applyTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem(THEME_KEY, theme);
+    const resolved = theme === 'auto' ? getSystemTheme() : theme;
+    root.setAttribute('data-theme', resolved);
+    if (theme !== 'auto') localStorage.setItem(THEME_KEY, theme);
   }
 
   function initTheme() {
@@ -445,7 +446,8 @@
     requestAnimationFrame(() => { scrollToSlide(0); updateUI(); });
   })();
 
-  /* ── Init ─────────────────────────────────────────────────── */
+
+  /* -- Init -- */
   initTheme();
   initLang();
 
