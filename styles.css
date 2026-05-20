@@ -5,15 +5,6 @@
 
 /* ── Custom Properties ──────────────────────────────────────── */
 :root {
-  /* Brand colours */
-  --deep-blue:     #1A3F6F;
-  --estonian-blue: #2563B0;
-  --sky-blue:      #4B8EDE;
-  --pale-blue:     #D6E8FA;
-  --forest-green:  #22A86A;
-  --pine:          #16784C;
-  --sun-amber:     #F5A623;
-
   /* Functional */
   --accent:        #2563B0;
   --accent-hover:  #1A3F6F;
@@ -21,8 +12,6 @@
 
   /* Gradients */
   --grad-primary:  linear-gradient(135deg, #2563B0 0%, #22A86A 100%);
-  --grad-sky:      linear-gradient(135deg, #4B8EDE 0%, #2563B0 100%);
-  --grad-warm:     linear-gradient(135deg, #F5A623 0%, #22A86A 100%);
   --grad-text:     linear-gradient(135deg, #1A3F6F 0%, #2563B0 50%, #22A86A 100%);
   --grad-icon-1:   linear-gradient(135deg, #1A3F6F, #2563B0);
   --grad-icon-2:   linear-gradient(135deg, #22A86A, #16784C);
@@ -52,16 +41,13 @@
   --transition:    .25s ease;
 }
 
-/* Dark mode — single source of truth for both explicit toggle and system preference */
-[data-theme="dark"],
-:root:not([data-theme="light"]):is(.prefers-dark) {
+/* Dark mode — JS always sets data-theme explicitly */
+[data-theme="dark"] {
   --accent:        #4B8EDE;
   --accent-hover:  #D6E8FA;
   --accent-light:  #0d1e38;
 
   --grad-primary:  linear-gradient(135deg, #4B8EDE 0%, #22A86A 100%);
-  --grad-sky:      linear-gradient(135deg, #D6E8FA 0%, #4B8EDE 100%);
-  --grad-warm:     linear-gradient(135deg, #F5A623 0%, #22A86A 100%);
   --grad-text:     linear-gradient(135deg, #4B8EDE 0%, #D6E8FA 50%, #22A86A 100%);
 
   --bg:            #0d1117;
@@ -77,28 +63,6 @@
   --shadow-lg:     0 12px 48px rgba(0,0,0,.65);
 
   --nav-bg:        rgba(13,17,23,.9);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --accent:        #4B8EDE;
-    --accent-hover:  #D6E8FA;
-    --accent-light:  #0d1e38;
-    --grad-primary:  linear-gradient(135deg, #4B8EDE 0%, #22A86A 100%);
-    --grad-sky:      linear-gradient(135deg, #D6E8FA 0%, #4B8EDE 100%);
-    --grad-warm:     linear-gradient(135deg, #F5A623 0%, #22A86A 100%);
-    --grad-text:     linear-gradient(135deg, #4B8EDE 0%, #D6E8FA 50%, #22A86A 100%);
-    --bg:            #0d1117;
-    --bg-alt:        #0f1a2e;
-    --bg-card:       #152136;
-    --text:          #F4F6FA;
-    --text-muted:    #8b949e;
-    --border:        rgba(75,142,222,.18);
-    --shadow-sm:     0 2px 8px rgba(0,0,0,.4);
-    --shadow-md:     0 4px 24px rgba(0,0,0,.5);
-    --shadow-lg:     0 12px 48px rgba(0,0,0,.65);
-    --nav-bg:        rgba(13,17,23,.9);
-  }
 }
 
 /* ── Keyframes ───────────────────────────────────────────────── */
@@ -156,7 +120,7 @@
 
 /* ── Reset ───────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { font-size: 16px; }
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   background: var(--bg);
@@ -465,8 +429,6 @@ img { max-width: 100%; display: block; }
 [data-theme="dark"]  .icon-moon { display: none;   }
 [data-theme="light"] .icon-sun  { display: none;   }
 [data-theme="light"] .icon-moon { display: inline; }
-:root:not([data-theme]) .icon-sun  { display: none; }
-:root:not([data-theme]) .icon-moon { display: inline; }
 
 .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: .3rem; }
 .hamburger span { display: block; width: 22px; height: 2.5px; border-radius: 3px; background: var(--text); transition: transform var(--transition), opacity var(--transition); }

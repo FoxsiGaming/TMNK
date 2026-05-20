@@ -107,7 +107,7 @@
     });
   }, { rootMargin: '-50% 0px -50% 0px' });
 
-  document.querySelectorAll('section[id], div[id]').forEach(s => sectionObserver.observe(s));
+  document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
 
   /* ── 6. Scroll reveal ────────────────────────────────────── */
 
